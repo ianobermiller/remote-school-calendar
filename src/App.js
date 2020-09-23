@@ -190,6 +190,7 @@ const CALENDARS_RAW = [
       ],
       // Tuesday
       [
+        {title: 'Homeroom / Math / Science', start: '08:30'},
         {title: 'PE - Live', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'ELA', start: '11:00'},
@@ -221,6 +222,7 @@ const CALENDARS_RAW = [
       ],
       // Friday
       [
+        {title: 'Homeroom / Math / Science', start: '08:30'},
         {title: 'PE - Seesaw', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'ELA', start: '11:00'},
