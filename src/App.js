@@ -13,7 +13,7 @@ const CALENDARS_RAW = [
     eventsByDay: [
       // Monday
       [
-        {title: 'Homeroom', start: '08:30'},
+        {title: 'Homeroom / Math / Science', start: '08:30'},
         {title: 'PE - Seesaw', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'ELA', start: '11:00'},
@@ -24,7 +24,6 @@ const CALENDARS_RAW = [
       ],
       // Tuesday
       [
-        {title: 'Homeroom', start: '08:30'},
         {title: 'PE - Live', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'ELA', start: '11:00'},
@@ -36,7 +35,7 @@ const CALENDARS_RAW = [
       ],
       // Wednesday
       [
-        {title: 'Homeroom', start: '08:30'},
+        {title: 'Homeroom / Math / Science', start: '08:30'},
         {title: 'PE - Live', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'ELA', start: '11:00'},
@@ -220,10 +219,9 @@ function App() {
           <div
             className={css`
               color: red;
-              font-size: 80%;
               position: absolute;
               right: calc(100% + 4px);
-              top: -9px;
+              top: -11px;
               white-space: nowrap;
             `}>
             {timeFormatter.format(currentTime)}
