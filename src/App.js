@@ -1,5 +1,6 @@
 import React from 'react';
 import {Temporal} from 'proposal-temporal';
+import {css} from 'emotion';
 
 const CURRENT_TIME = Temporal.Time.from({hour: 9, minute: 45});
 
@@ -43,18 +44,34 @@ function App() {
   }
 
   return (
-    <div className="container">
+    <div
+      className={css`
+        position: relative;
+        margin: 40px;
+      `}>
       {rows.map(t => (
-        <div className="row" key={current.toString()}>
+        <div
+          className={css`
+            height: ${ROW_HEIGHT}px;
+          `}
+          key={t.toString()}>
           {timeFormatter.format(t)}
         </div>
       ))}
 
       {CALENDARS.map((cal, i) => (
-        <div>
+        <div key={`calendar${i}`}>
           {cal.events.map((ev, i) => (
             <div
-              className="event"
+              className={css`
+                background: #ccc;
+                border: solid 1px white;
+                border-radius: 4px;
+                padding: 4px;
+                position: absolute;
+                left: 100px;
+                width: 200px;
+              `}
               key={i}
               style={{
                 height:
@@ -74,7 +91,12 @@ function App() {
         </div>
       ))}
       <div
-        className="current"
+        className={css`
+          border: solid 1px red;
+          position: absolute;
+          left: 100px;
+          right: 0;
+        `}
         style={{
           top:
             (CURRENT_TIME.difference(START_TIME, {largestUnit: 'minutes'})
@@ -83,49 +105,6 @@ function App() {
             ROW_HEIGHT,
         }}
       />
-
-      <style jsx>{`
-        .container {
-          position: relative;
-          margin: 40px;
-        }
-
-        .row {
-          height: ${ROW_HEIGHT}px;
-        }
-
-        .event {
-          background: #ccc;
-          border: solid 1px white;
-          border-radius: 4px;
-          padding: 4px;
-          position: absolute;
-          left: 100px;
-          width: 200px;
-        }
-
-        .current {
-          border: solid 1px red;
-          position: absolute;
-          left: 100px;
-          right: 0;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
     </div>
   );
 }
