@@ -2,167 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {Temporal} from 'proposal-temporal';
 import {css} from 'emotion';
 
-const START_TIME = Temporal.Time.from({hour: 8, minute: 0});
+const START_TIME = Temporal.Time.from({hour: 8, minute: 30});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
 const LABEL_STEP = Temporal.Duration.from({minutes: 30});
 
 const CALENDARS_RAW = [
-  {
-    name: 'Wellington',
-    color: 'rgb(60 165 78)',
-    eventsByDay: [
-      // Monday
-      [
-        {title: 'Homeroom / Math / Science', start: '08:30'},
-        {title: 'PE - Seesaw', start: '10:00'},
-        {title: 'Break', start: '10:30'},
-        {title: 'ELA', start: '11:00'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Break', start: '12:45'},
-        {title: 'Art or Music', start: '13:20', end: '13:50'},
-        {title: 'Science', start: '14:00', end: '14:30'},
-      ],
-      // Tuesday
-      [
-        {title: 'PE - Live', start: '10:00'},
-        {title: 'Break', start: '10:30'},
-        {title: 'ELA', start: '11:00'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Break', start: '12:45'},
-        {title: 'Small Groups', start: '13:10'},
-        {title: 'Break', start: '13:30'},
-        {title: 'Science', start: '14:00', end: '14:30'},
-      ],
-      // Wednesday
-      [
-        {title: 'Homeroom / Math / Science', start: '08:30'},
-        {title: 'PE - Seesaw', start: '10:00'},
-        {title: 'Break', start: '10:30'},
-        {title: 'ELA', start: '11:00'},
-        {title: 'Lunch', start: '12:00', end: '12:45'},
-        // {title: 'Community Meeting', start: '12:45', end: '13:15'},
-      ],
-      // Thursday
-      [
-        {title: 'Homeroom / Math / Science', start: '08:30'},
-        {title: 'PE - Seesaw', start: '10:00'},
-        {title: 'Break', start: '10:30'},
-        {title: 'ELA', start: '11:00'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Break', start: '12:45'},
-        {title: 'Art or Music', start: '13:20', end: '13:50'},
-        {title: 'Social Studies', start: '14:00', end: '14:30'},
-      ],
-      // Friday
-      [
-        {title: 'PE - Seesaw', start: '10:00'},
-        {title: 'Break', start: '10:30'},
-        {title: 'ELA', start: '11:00'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Break', start: '12:45'},
-        {title: 'Social Studies', start: '13:10'},
-        {title: 'Break', start: '13:30'},
-        {title: 'Social Studies', start: '14:00', end: '14:30'},
-      ],
-    ],
-  },
-  {
-    name: 'Isla',
-    color: 'rgb(181 63 172)',
-    eventsByDay: [
-      // Monday
-      [
-        {title: 'Welcome / SEL', start: '08:30'},
-        {title: 'Writing', start: '09:00'},
-        {title: 'Math', start: '09:45'},
-        {title: 'Break', start: '10:30'},
-        {title: 'PE - Live', start: '11:00'},
-        {title: 'Reading', start: '11:30'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
-        // {
-        //   title: 'Independent Work / Small Groups',
-        //   start: '13:20',
-        //   end: '14:30',
-        // },
-      ],
-      // Tuesday
-      [
-        {title: 'Welcome / SEL', start: '08:30'},
-        {title: 'Writing', start: '09:00'},
-        {title: 'Math', start: '09:45'},
-        {title: 'Break', start: '10:30'},
-        {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Reading', start: '11:30'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
-        {
-          title: 'Reading',
-          start: '13:20',
-          end: '13:50',
-        },
-        // {
-        //   title: 'Independent Work / Small Groups',
-        //   start: '13:55',
-        //   end: '14:30',
-        // },
-      ],
-      // Wednesday
-      [
-        {title: 'Welcome / SEL', start: '08:30'},
-        {title: 'Writing', start: '09:00'},
-        {title: 'Reading', start: '09:30'},
-        {title: 'Independent Work / Small Groups', start: '10:00'},
-        {title: 'Break', start: '10:30'},
-        {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Reading', start: '11:30'},
-        {title: 'Lunch', start: '12:00'},
-        // {title: 'Community Meeting', start: '12:45', end: '13:15'},
-        // {
-        //   title: 'Independent Work / Small Groups',
-        //   start: '13:15',
-        //   end: '13:45',
-        // },
-      ],
-      // Thursday
-      [
-        {title: 'Welcome / SEL', start: '08:30'},
-        {title: 'Writing', start: '09:00'},
-        {title: 'Math', start: '09:45'},
-        {title: 'Break', start: '10:30'},
-        {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Reading', start: '11:30'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
-        {
-          title: 'Reading',
-          start: '13:20',
-          end: '13:50',
-        },
-        // {
-        //   title: 'Independent Work / Small Groups',
-        //   start: '13:55',
-        //   end: '14:30',
-        // },
-      ],
-      // Friday
-      [
-        {title: 'Welcome / SEL', start: '08:30'},
-        {title: 'Writing', start: '09:00'},
-        {title: 'Math', start: '09:45'},
-        {title: 'Break', start: '10:30'},
-        {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Reading', start: '11:30'},
-        {title: 'Lunch', start: '12:00'},
-        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
-        // {
-        //   title: 'Independent Work / Small Groups',
-        //   start: '13:20',
-        //   end: '14:30',
-        // },
-      ],
-    ],
-  },
   {
     name: 'Adaira',
     color: 'rgb(220 130 18)',
@@ -232,6 +76,162 @@ const CALENDARS_RAW = [
       ],
     ],
   },
+  {
+    name: 'Isla',
+    color: 'rgb(181 63 172)',
+    eventsByDay: [
+      // Monday
+      [
+        {title: 'Welcome / SEL', start: '08:30'},
+        {title: 'Writing', start: '09:00'},
+        {title: 'Math', start: '09:45'},
+        {title: 'Break', start: '10:30'},
+        {title: 'PE - Live', start: '11:00'},
+        {title: 'Reading', start: '11:30'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
+        // {
+        //   title: 'Independent Work / Small Groups',
+        //   start: '13:20',
+        //   end: '14:30',
+        // },
+      ],
+      // Tuesday
+      [
+        {title: 'Welcome / SEL', start: '08:30'},
+        {title: 'Writing', start: '09:00'},
+        {title: 'Math', start: '09:45'},
+        {title: 'Break', start: '10:30'},
+        {title: 'PE - Seesaw', start: '11:00'},
+        {title: 'Reading', start: '11:30'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
+        {
+          title: 'Reading',
+          start: '13:20',
+          end: '13:50',
+        },
+        // {
+        //   title: 'Independent Work / Small Groups',
+        //   start: '13:55',
+        //   end: '14:30',
+        // },
+      ],
+      // Wednesday
+      [
+        {title: 'Welcome / SEL', start: '08:30'},
+        {title: 'Writing', start: '09:00'},
+        {title: 'Reading', start: '09:30'},
+        {title: 'Independent Work / Small Groups', start: '10:00'},
+        {title: 'Break', start: '10:30'},
+        {title: 'PE - Seesaw', start: '11:00'},
+        {title: 'Reading', start: '11:30'},
+        {title: 'Lunch', start: '12:00', end: '12:45'},
+        // {title: 'Community Meeting', start: '12:45', end: '13:15'},
+        // {
+        //   title: 'Independent Work / Small Groups',
+        //   start: '13:15',
+        //   end: '13:45',
+        // },
+      ],
+      // Thursday
+      [
+        {title: 'Welcome / SEL', start: '08:30'},
+        {title: 'Writing', start: '09:00'},
+        {title: 'Math', start: '09:45'},
+        {title: 'Break', start: '10:30'},
+        {title: 'PE - Seesaw', start: '11:00'},
+        {title: 'Reading', start: '11:30'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
+        {
+          title: 'Reading',
+          start: '13:20',
+          end: '13:50',
+        },
+        // {
+        //   title: 'Independent Work / Small Groups',
+        //   start: '13:55',
+        //   end: '14:30',
+        // },
+      ],
+      // Friday
+      [
+        {title: 'Welcome / SEL', start: '08:30'},
+        {title: 'Writing', start: '09:00'},
+        {title: 'Math', start: '09:45'},
+        {title: 'Break', start: '10:30'},
+        {title: 'PE - Seesaw', start: '11:00'},
+        {title: 'Reading', start: '11:30'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
+        // {
+        //   title: 'Independent Work / Small Groups',
+        //   start: '13:20',
+        //   end: '14:30',
+        // },
+      ],
+    ],
+  },
+  {
+    name: 'Wellington',
+    color: 'rgb(60 165 78)',
+    eventsByDay: [
+      // Monday
+      [
+        {title: 'Homeroom / Math / Science', start: '08:30'},
+        {title: 'PE - Seesaw', start: '10:00'},
+        {title: 'Break', start: '10:30'},
+        {title: 'ELA', start: '11:00'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Break', start: '12:45'},
+        {title: 'Art or Music', start: '13:20', end: '13:50'},
+        {title: 'Science', start: '14:00', end: '14:30'},
+      ],
+      // Tuesday
+      [
+        {title: 'PE - Live', start: '10:00'},
+        {title: 'Break', start: '10:30'},
+        {title: 'ELA', start: '11:00'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Break', start: '12:45'},
+        {title: 'Small Groups', start: '13:10'},
+        {title: 'Break', start: '13:30'},
+        {title: 'Science', start: '14:00', end: '14:30'},
+      ],
+      // Wednesday
+      [
+        {title: 'Homeroom / Math / Science', start: '08:30'},
+        {title: 'PE - Seesaw', start: '10:00'},
+        {title: 'Break', start: '10:30'},
+        {title: 'ELA', start: '11:00'},
+        {title: 'Lunch', start: '12:00', end: '12:45'},
+        // {title: 'Community Meeting', start: '12:45', end: '13:15'},
+      ],
+      // Thursday
+      [
+        {title: 'Homeroom / Math / Science', start: '08:30'},
+        {title: 'PE - Seesaw', start: '10:00'},
+        {title: 'Break', start: '10:30'},
+        {title: 'ELA', start: '11:00'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Break', start: '12:45'},
+        {title: 'Art or Music', start: '13:20', end: '13:50'},
+        {title: 'Social Studies', start: '14:00', end: '14:30'},
+      ],
+      // Friday
+      [
+        {title: 'PE - Seesaw', start: '10:00'},
+        {title: 'Break', start: '10:30'},
+        {title: 'ELA', start: '11:00'},
+        {title: 'Lunch', start: '12:00'},
+        {title: 'Break', start: '12:45'},
+        {title: 'Social Studies', start: '13:10'},
+        {title: 'Break', start: '13:30'},
+        {title: 'Social Studies', start: '14:00', end: '14:30'},
+      ],
+    ],
+  },
 ];
 
 const CALENDARS = CALENDARS_RAW.map(cal => ({
@@ -241,16 +241,18 @@ const CALENDARS = CALENDARS_RAW.map(cal => ({
       const end = ev.end ?? events[i + 1]?.start ?? '14:30';
       const lower = ev.title.toLowerCase();
       let color = ev.color;
-      if (
-        ['break', 'lunch'].includes(lower) ||
-        lower.includes('independent') ||
-        lower.includes('seesaw')
-      ) {
-        color = '#aaa';
+      let opacity = 1;
+      if (['break', 'lunch'].includes(lower)) {
+        color = '#999';
+        opacity = 0.6;
+      }
+      if (lower.includes('independent') || lower.includes('seesaw')) {
+        opacity = 0.6;
       }
       return {
         ...ev,
         color,
+        opacity,
         start: Temporal.Time.from(ev.start),
         end: Temporal.Time.from(end),
       };
@@ -340,18 +342,19 @@ function App() {
             return (
               <div
                 className={css`
-                  background: ${background};
                   border-radius: 4px;
                   color: white;
                   padding: 4px;
                   margin-bottom: 2px;
-                  margin-left: 4px;
+                  margin-left: 8px;
                 `}
                 key={`calendar-${calIndex}_event-${evIndex}`}
                 style={{
+                  background,
                   gridColumn: calIndex + 2,
                   gridRowStart: toGridRow(ev.start),
                   gridRowEnd: toGridRow(ev.end),
+                  opacity: ev.opacity,
                 }}>
                 {ev.title}
               </div>
