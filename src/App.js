@@ -8,8 +8,6 @@ const START_TIME = Temporal.Time.from({hour: 8, minute: 0});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
 const STEP = Temporal.Duration.from({minutes: 30});
 
-const ROW_HEIGHT = 40;
-
 const CALENDARS_RAW = [
   {
     name: 'Wellington',
@@ -46,67 +44,72 @@ function App() {
   return (
     <div
       className={css`
-        position: relative;
+        display: grid;
+        height: calc(100vh - 80px);
         margin: 40px;
+        width: calc(100vw - 80px);
+        grid-template-columns: 100px;
+        grid-auto-rows: 1fr;
+        grid-auto-columns: 1fr;
       `}>
       {rows.map(t => (
         <div
-          className={css`
-            height: ${ROW_HEIGHT}px;
-          `}
-          key={t.toString()}>
+          key={t.toString()}
+          style={{
+            gridColumn: '1',
+            gridRow: toGridRow(t),
+          }}>
           {timeFormatter.format(t)}
         </div>
       ))}
 
-      {CALENDARS.map((cal, i) => (
-        <div key={`calendar${i}`}>
-          {cal.events.map((ev, i) => (
-            <div
-              className={css`
-                background: #ccc;
-                border: solid 1px white;
-                border-radius: 4px;
-                padding: 4px;
-                position: absolute;
-                left: 100px;
-                width: 200px;
-              `}
-              key={i}
-              style={{
-                height:
-                  (ev.end.difference(ev.start, {largestUnit: 'minutes'})
-                    .minutes /
-                    STEP.minutes) *
-                  ROW_HEIGHT,
-                top:
-                  (ev.start.difference(START_TIME, {largestUnit: 'minutes'})
-                    .minutes /
-                    STEP.minutes) *
-                  ROW_HEIGHT,
-              }}>
-              {ev.title}
-            </div>
-          ))}
-        </div>
-      ))}
+      {CALENDARS.map((cal, calIndex) =>
+        cal.events.map((ev, i) => (
+          <div
+            className={css`
+              background: #ccc;
+              border: solid 1px white;
+              border-radius: 4px;
+              padding: 4px;
+            `}
+            key={i}
+            style={{
+              gridColumn: calIndex + 2,
+              gridRowStart: log(toGridRow(ev.start)),
+              gridRowEnd: toGridRow(ev.end) - 1,
+            }}>
+            {ev.title}
+          </div>
+        )),
+      )}
       <div
         className={css`
           border: solid 1px red;
-          position: absolute;
-          left: 100px;
-          right: 0;
         `}
         style={{
-          top:
-            (CURRENT_TIME.difference(START_TIME, {largestUnit: 'minutes'})
-              .minutes /
-              STEP.minutes) *
-            ROW_HEIGHT,
+          gridColumnStart: 1,
+          gridColumnEnd: CALENDARS.length + 2,
+          gridRow: Math.floor(
+            CURRENT_TIME.difference(START_TIME, {largestUnit: 'minutes'})
+              .minutes / 5,
+          ),
         }}
       />
     </div>
   );
+}
+
+function toGridRow(time) {
+  return (
+    Math.floor(
+      time.difference(START_TIME, {largestUnit: 'minutes'}).minutes / 5,
+    ) + 1
+  );
+}
+
+function log(value) {
+  console.log(value);
+  return value;
 }
 
 export default App;
