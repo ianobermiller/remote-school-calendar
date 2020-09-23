@@ -6,7 +6,7 @@ const CURRENT_TIME = Temporal.Time.from({hour: 9, minute: 45});
 
 const START_TIME = Temporal.Time.from({hour: 8, minute: 0});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
-const STEP = Temporal.Duration.from({minutes: 30});
+const LABEL_STEP = Temporal.Duration.from({minutes: 30});
 
 const CALENDARS_RAW = [
   {
@@ -38,7 +38,7 @@ function App() {
   let current = START_TIME;
   while (Temporal.Time.compare(current, END_TIME) <= 0) {
     rows.push(current);
-    current = current.plus(STEP);
+    current = current.plus(LABEL_STEP);
   }
 
   return (
@@ -49,40 +49,40 @@ function App() {
         margin: 40px;
         width: calc(100vw - 80px);
         grid-template-columns: 100px;
-        grid-auto-rows: 1fr;
-        grid-auto-columns: 1fr;
+        grid-auto-rows: minmax(0, 1fr);
+        grid-auto-columns: minmax(0, 1fr);
       `}>
-      {rows.map(t => (
-        <>
-          <div
-            className={css`
-              padding-right: 8px;
-              text-align: right;
-              transform: translateY(-50%);
-            `}
-            key={`label-${t.toString()}`}
-            style={{
-              gridColumn: 1,
-              gridRow: toGridRow(t),
-            }}>
-            {timeFormatter.format(t)}
-          </div>
-          <div
-            className={css`
-              border-top: solid 1px #ccc;
-            `}
-            key={`divider-${t.toString()}`}
-            style={{
-              gridColumnStart: 2,
-              gridColumnEnd: CALENDARS.length + 2,
-              gridRow: toGridRow(t),
-            }}
-          />
-        </>
-      ))}
+      {rows.map((t, i) => [
+        <div
+          className={css`
+            color: #666;
+            font-size: 80%;
+            padding-right: 8px;
+            text-align: right;
+            transform: translateY(-4px);
+          `}
+          key={`label-${t.toString()}`}
+          style={{
+            gridColumn: 1,
+            gridRow: toGridRow(t),
+          }}>
+          {timeFormatter.format(t)}
+        </div>,
+        <div
+          className={css`
+            border-top: solid 1px #ccc;
+          `}
+          key={`divider-${t.toString()}`}
+          style={{
+            gridColumnStart: 2,
+            gridColumnEnd: CALENDARS.length + 2,
+            gridRow: toGridRow(t),
+          }}
+        />,
+      ])}
 
       {CALENDARS.map((cal, calIndex) =>
-        cal.events.map((ev, i) => (
+        cal.events.map((ev, evIndex) => (
           <div
             className={css`
               background: #ccc;
@@ -90,10 +90,10 @@ function App() {
               border-radius: 4px;
               padding: 4px;
             `}
-            key={i}
+            key={`calendar-${calIndex}_event-${evIndex}`}
             style={{
               gridColumn: calIndex + 2,
-              gridRowStart: log(toGridRow(ev.start)),
+              gridRowStart: toGridRow(ev.start),
               gridRowEnd: toGridRow(ev.end),
             }}>
             {ev.title}
@@ -108,10 +108,7 @@ function App() {
         style={{
           gridColumnStart: 1,
           gridColumnEnd: CALENDARS.length + 2,
-          gridRow: Math.floor(
-            CURRENT_TIME.difference(START_TIME, {largestUnit: 'minutes'})
-              .minutes / 5,
-          ),
+          gridRow: toGridRow(CURRENT_TIME),
         }}>
         {timeFormatter.format(CURRENT_TIME)}
       </div>
@@ -127,6 +124,7 @@ function toGridRow(time) {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 function log(value) {
   console.log(value);
   return value;
