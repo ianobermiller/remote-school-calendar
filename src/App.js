@@ -53,14 +53,32 @@ function App() {
         grid-auto-columns: 1fr;
       `}>
       {rows.map(t => (
-        <div
-          key={t.toString()}
-          style={{
-            gridColumn: '1',
-            gridRow: toGridRow(t),
-          }}>
-          {timeFormatter.format(t)}
-        </div>
+        <>
+          <div
+            className={css`
+              padding-right: 8px;
+              text-align: right;
+              transform: translateY(-50%);
+            `}
+            key={`label-${t.toString()}`}
+            style={{
+              gridColumn: 1,
+              gridRow: toGridRow(t),
+            }}>
+            {timeFormatter.format(t)}
+          </div>
+          <div
+            className={css`
+              border-top: solid 1px #ccc;
+            `}
+            key={`divider-${t.toString()}`}
+            style={{
+              gridColumnStart: 2,
+              gridColumnEnd: CALENDARS.length + 2,
+              gridRow: toGridRow(t),
+            }}
+          />
+        </>
       ))}
 
       {CALENDARS.map((cal, calIndex) =>
@@ -76,7 +94,7 @@ function App() {
             style={{
               gridColumn: calIndex + 2,
               gridRowStart: log(toGridRow(ev.start)),
-              gridRowEnd: toGridRow(ev.end) - 1,
+              gridRowEnd: toGridRow(ev.end),
             }}>
             {ev.title}
           </div>
@@ -84,7 +102,8 @@ function App() {
       )}
       <div
         className={css`
-          border: solid 1px red;
+          border-top: solid 2px red;
+          color: red;
         `}
         style={{
           gridColumnStart: 1,
@@ -93,8 +112,9 @@ function App() {
             CURRENT_TIME.difference(START_TIME, {largestUnit: 'minutes'})
               .minutes / 5,
           ),
-        }}
-      />
+        }}>
+        {timeFormatter.format(CURRENT_TIME)}
+      </div>
     </div>
   );
 }
