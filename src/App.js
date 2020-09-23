@@ -1,8 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Temporal} from 'proposal-temporal';
 import {css} from 'emotion';
-
-const CURRENT_TIME = Temporal.Time.from({hour: 9, minute: 45});
 
 const START_TIME = Temporal.Time.from({hour: 8, minute: 0});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
@@ -14,6 +12,12 @@ const CALENDARS_RAW = [
     events: [
       {title: 'Homeroom', start: '08:00', end: '10:00'},
       {title: 'PE', start: '10:00', end: '10:30'},
+      {title: 'Break', start: '10:30', end: '11:00'},
+      {title: 'ELA', start: '11:00', end: '12:00'},
+      {title: 'Lunch', start: '12:00', end: '12:45'},
+      {title: 'Break', start: '12:45', end: '13:20'},
+      {title: 'Art or Music', start: '13:20', end: '13:50'},
+      {title: 'Science', start: '14:00', end: '14:30'},
     ],
   },
   {
@@ -48,6 +52,8 @@ const timeFormatter = new Intl.DateTimeFormat(undefined, {
 });
 
 function App() {
+  const [currentTime, setCurrentTime] = useState(Temporal.now.time());
+
   const rows = [];
   let current = START_TIME;
   while (Temporal.Time.compare(current, END_TIME) <= 0) {
@@ -100,7 +106,7 @@ function App() {
         <h1
           className={css`
             font-size: 120%;
-            margin: 0 0 16px 4px;
+            margin: 0 0 16px 8px;
           `}
           key={`calendar-${calIndex}-label`}
           style={{
@@ -113,44 +119,46 @@ function App() {
           <div
             className={css`
               background: rgb(63, 81, 181);
-              border-bottom: solid 1px white;
               border-radius: 4px;
               color: white;
               padding: 4px;
+              margin-bottom: 2px;
+              margin-left: 4px;
             `}
             key={`calendar-${calIndex}_event-${evIndex}`}
             style={{
               gridColumn: calIndex + 2,
               gridRowStart: toGridRow(ev.start),
               gridRowEnd: toGridRow(ev.end),
-              marginRight: calIndex === CALENDARS.length - 1 ? 0 : 8,
             }}>
             {ev.title}
           </div>
         )),
       ])}
-      <div
-        className={css`
-          border-top: solid 2px red;
-          position: relative;
-        `}
-        style={{
-          gridColumnStart: 1,
-          gridColumnEnd: CALENDARS.length + 2,
-          gridRow: toGridRow(CURRENT_TIME),
-        }}>
+      {Temporal.Time.compare(currentTime, START_TIME) >= 0 && (
         <div
           className={css`
-            color: red;
-            font-size: 80%;
-            position: absolute;
-            right: calc(100% + 4px);
-            top: -9px;
-            white-space: nowrap;
-          `}>
-          {timeFormatter.format(CURRENT_TIME)}
+            border-top: solid 2px red;
+            position: relative;
+          `}
+          style={{
+            gridColumnStart: 1,
+            gridColumnEnd: CALENDARS.length + 2,
+            gridRow: toGridRow(currentTime),
+          }}>
+          <div
+            className={css`
+              color: red;
+              font-size: 80%;
+              position: absolute;
+              right: calc(100% + 4px);
+              top: -9px;
+              white-space: nowrap;
+            `}>
+            {timeFormatter.format(currentTime)}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
