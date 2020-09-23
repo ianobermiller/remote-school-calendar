@@ -16,6 +16,20 @@ const CALENDARS_RAW = [
       {title: 'PE', start: '10:00', end: '10:30'},
     ],
   },
+  {
+    name: 'Isla',
+    events: [
+      {title: 'Homeroom', start: '08:00', end: '10:00'},
+      {title: 'PE', start: '10:00', end: '10:30'},
+    ],
+  },
+  {
+    name: 'Adaira',
+    events: [
+      {title: 'Homeroom', start: '08:00', end: '10:00'},
+      {title: 'PE', start: '10:00', end: '10:30'},
+    ],
+  },
 ];
 
 const CALENDARS = CALENDARS_RAW.map(cal => ({
@@ -46,9 +60,10 @@ function App() {
       className={css`
         display: grid;
         height: calc(100vh - 80px);
-        margin: 40px;
-        width: calc(100vw - 80px);
-        grid-template-columns: 100px;
+        margin: 40px 40px 40px 80px;
+        width: calc(100vw - 120px);
+        grid-template-columns: auto;
+        grid-template-rows: auto;
         grid-auto-rows: minmax(0, 1fr);
         grid-auto-columns: minmax(0, 1fr);
       `}>
@@ -59,7 +74,7 @@ function App() {
             font-size: 80%;
             padding-right: 8px;
             text-align: right;
-            transform: translateY(-4px);
+            transform: translateY(-3px);
           `}
           key={`label-${t.toString()}`}
           style={{
@@ -81,13 +96,26 @@ function App() {
         />,
       ])}
 
-      {CALENDARS.map((cal, calIndex) =>
+      {CALENDARS.map((cal, calIndex) => [
+        <h1
+          className={css`
+            font-size: 120%;
+            margin: 0 0 16px 4px;
+          `}
+          key={`calendar-${calIndex}-label`}
+          style={{
+            gridColumn: calIndex + 2,
+            gridRow: 1,
+          }}>
+          {cal.name}
+        </h1>,
         cal.events.map((ev, evIndex) => (
           <div
             className={css`
-              background: #ccc;
-              border: solid 1px white;
+              background: rgb(63, 81, 181);
+              border-bottom: solid 1px white;
               border-radius: 4px;
+              color: white;
               padding: 4px;
             `}
             key={`calendar-${calIndex}_event-${evIndex}`}
@@ -95,22 +123,33 @@ function App() {
               gridColumn: calIndex + 2,
               gridRowStart: toGridRow(ev.start),
               gridRowEnd: toGridRow(ev.end),
+              marginRight: calIndex === CALENDARS.length - 1 ? 0 : 8,
             }}>
             {ev.title}
           </div>
         )),
-      )}
+      ])}
       <div
         className={css`
           border-top: solid 2px red;
-          color: red;
+          position: relative;
         `}
         style={{
           gridColumnStart: 1,
           gridColumnEnd: CALENDARS.length + 2,
           gridRow: toGridRow(CURRENT_TIME),
         }}>
-        {timeFormatter.format(CURRENT_TIME)}
+        <div
+          className={css`
+            color: red;
+            font-size: 80%;
+            position: absolute;
+            right: calc(100% + 4px);
+            top: -9px;
+            white-space: nowrap;
+          `}>
+          {timeFormatter.format(CURRENT_TIME)}
+        </div>
       </div>
     </div>
   );
@@ -120,7 +159,10 @@ function toGridRow(time) {
   return (
     Math.floor(
       time.difference(START_TIME, {largestUnit: 'minutes'}).minutes / 5,
-    ) + 1
+    ) +
+    1 +
+    // Add an extra for the header
+    1
   );
 }
 
