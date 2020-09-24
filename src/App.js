@@ -1,6 +1,7 @@
 import {css} from 'emotion';
 import {Temporal} from 'proposal-temporal';
 import React, {useEffect, useState} from 'react';
+import {FaCompress, FaExpand} from 'react-icons/fa';
 import {CALENDAR_DATA} from './CalendarData';
 import createSilentAudio from './createSilentAudio';
 
@@ -52,7 +53,6 @@ function App() {
   }, []);
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [isShowingOverlay, setIsShowingOverlay] = useState(true);
 
   const rows = [];
   let current = START_TIME;
@@ -75,7 +75,7 @@ function App() {
         grid-auto-columns: minmax(0, 1fr);
       `}>
       {rows.map((t, i) => (
-        <TimeRow time={t} />
+        <TimeRow key={`label-${t.toString()}`} time={t} />
       ))}
 
       {CALENDARS.map((cal, calIndex) => (
@@ -105,74 +105,65 @@ function App() {
         <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
       )}
 
-      {isShowingOverlay && (
-        <div
-          className={css`
-            align-items: center;
-            background: #0003;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            left: 0;
-            position: fixed;
-            right: 0;
-            top: 0;
-          `}>
-          <button
-            className={css`
-              font-size: 200%;
-              padding: 10px 20px;
-            `}
+      <div
+        className={css`
+          cursor: pointer;
+          padding: 12px;
+          position: fixed;
+          right: 0;
+          top: 0;
+        `}>
+        {isPlayingAudio ? (
+          <FaCompress
+            color="#aaa"
             onClick={() => {
-              setIsShowingOverlay(false);
+              setIsPlayingAudio(false);
+              document.exitFullscreen();
+            }}
+          />
+        ) : (
+          <FaExpand
+            color="#aaa"
+            onClick={() => {
               setIsPlayingAudio(true);
               document.body.firstElementChild.requestFullscreen();
-            }}>
-            Press for Fullscreen
-          </button>
-          <button
-            onClick={e => {
-              setIsShowingOverlay(false);
-              e.preventDefault();
-            }}>
-            Or just close the overlay
-          </button>
-        </div>
-      )}
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }
 
 function TimeRow({time}) {
-  return [
-    <div
-      className={css`
-        color: #666;
-        font-size: 80%;
-        padding-right: 8px;
-        text-align: right;
-        transform: translateY(-6px);
-      `}
-      key={`label-${time.toString()}`}
-      style={{
-        gridColumn: 1,
-        gridRow: toGridRow(time),
-      }}>
-      {timeFormatter.format(time)}
-    </div>,
-    <div
-      className={css`
-        border-top: solid 1px #ccc;
-      `}
-      key={`divider-${time.toString()}`}
-      style={{
-        gridColumnStart: 2,
-        gridColumnEnd: CALENDARS.length + 2,
-        gridRow: toGridRow(time),
-      }}
-    />,
-  ];
+  return (
+    <>
+      <div
+        className={css`
+          color: #666;
+          font-size: 80%;
+          padding-right: 8px;
+          text-align: right;
+          transform: translateY(-6px);
+        `}
+        style={{
+          gridColumn: 1,
+          gridRow: toGridRow(time),
+        }}>
+        {timeFormatter.format(time)}
+      </div>
+      <div
+        className={css`
+          border-top: solid 1px #ccc;
+        `}
+        style={{
+          gridColumnStart: 2,
+          gridColumnEnd: CALENDARS.length + 2,
+          gridRow: toGridRow(time),
+        }}
+      />
+    </>
+  );
 }
 
 function CalendarEvent({event, calendar, calendarIndex}) {
