@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Temporal} from 'proposal-temporal';
 import {css} from 'emotion';
+import createSilentAudio from './createSilentAudio';
+
+const audioSrc = createSilentAudio(10);
 
 const START_TIME = Temporal.Time.from({hour: 8, minute: 30});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
@@ -277,6 +280,8 @@ function App() {
     return () => clearInterval(id);
   }, []);
 
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
   const rows = [];
   let current = START_TIME;
   while (Temporal.Time.compare(current, END_TIME) <= 0) {
@@ -287,6 +292,7 @@ function App() {
   return (
     <div
       className={css`
+        background: white;
         display: grid;
         height: calc(100vh - 80px);
         margin: 40px 40px 40px 80px;
@@ -385,6 +391,34 @@ function App() {
             `}>
             {timeFormatter.format(currentTime)}
           </div>
+        </div>
+      )}
+      {isPlayingAudio ? (
+        <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
+      ) : (
+        <div
+          className={css`
+            align-items: center;
+            background: #0003;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            left: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+          `}>
+          <button
+            className={css`
+              font-size: 200%;
+              padding: 10px 20px;
+            `}
+            onClick={() => {
+              setIsPlayingAudio(true);
+              document.body.firstElementChild.requestFullscreen();
+            }}>
+            Press for Fullscreen
+          </button>
         </div>
       )}
     </div>
