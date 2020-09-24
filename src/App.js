@@ -281,6 +281,7 @@ function App() {
   }, []);
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isShowingOverlay, setIsShowingOverlay] = useState(true);
 
   const rows = [];
   let current = START_TIME;
@@ -396,15 +397,17 @@ function App() {
           </div>
         )}
 
-      {isPlayingAudio ? (
+      {isPlayingAudio && (
         <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
-      ) : (
+      )}
+      {isShowingOverlay && (
         <div
           className={css`
             align-items: center;
             background: #0003;
             bottom: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             left: 0;
             position: fixed;
@@ -417,10 +420,18 @@ function App() {
               padding: 10px 20px;
             `}
             onClick={() => {
+              setIsShowingOverlay(false);
               setIsPlayingAudio(true);
               document.body.firstElementChild.requestFullscreen();
             }}>
             Press for Fullscreen
+          </button>
+          <button
+            onClick={e => {
+              setIsShowingOverlay(false);
+              e.preventDefault();
+            }}>
+            Or just close the overlay
           </button>
         </div>
       )}
