@@ -370,29 +370,30 @@ function App() {
           },
         ),
       ])}
-      {Temporal.Time.compare(currentTime, START_TIME) >= 0 && (
-        <div
-          className={css`
-            border-top: solid 2px red;
-            position: relative;
-          `}
-          style={{
-            gridColumnStart: 1,
-            gridColumnEnd: CALENDARS.length + 2,
-            gridRow: toGridRow(currentTime),
-          }}>
+      {Temporal.Time.compare(currentTime, START_TIME) >= 0 &&
+        Temporal.Time.compare(currentTime, END_TIME) <= 0 && (
           <div
             className={css`
-              color: red;
-              position: absolute;
-              right: calc(100% + 4px);
-              top: -11px;
-              white-space: nowrap;
-            `}>
-            {timeFormatter.format(currentTime)}
+              border-top: solid 2px red;
+              position: relative;
+            `}
+            style={{
+              gridColumnStart: 1,
+              gridColumnEnd: CALENDARS.length + 2,
+              gridRow: toGridRow(currentTime),
+            }}>
+            <div
+              className={css`
+                color: red;
+                position: absolute;
+                right: calc(100% + 4px);
+                top: -11px;
+                white-space: nowrap;
+              `}>
+              {timeFormatter.format(currentTime)}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       {isPlayingAudio ? (
         <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
       ) : (
