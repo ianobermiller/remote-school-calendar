@@ -13,9 +13,15 @@ const LABEL_STEP = Temporal.Duration.from({minutes: 30});
 
 const CALENDARS = CALENDAR_DATA.map(cal => ({
   ...cal,
-  eventsByDay: cal.eventsByDay.map(events =>
+  eventsByDay: cal.eventsByDay.map((events, dayIndex) =>
     events.map((ev, i) => {
-      const end = ev.end ?? events[i + 1]?.start ?? '14:30';
+      const end = ev.end ?? events[i + 1]?.start;
+      if (!end) {
+        throw new Error(
+          `Missing end time for last event "${ev.title}" on day ${dayIndex} in "${cal.name}"`,
+        );
+      }
+
       const lower = ev.title.toLowerCase();
       let color = ev.color;
       let opacity = 1;

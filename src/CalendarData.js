@@ -14,7 +14,7 @@ export const CALENDAR_DATA = [
         {title: 'Lunch', start: '11:30'},
         {title: 'Math - Group 2', start: '12:15'},
         {title: 'Break', start: '12:45'},
-        {title: 'Science / Social Studies', start: '13:00'},
+        {title: 'Science / Social Studies', start: '13:00', end: '13:30'},
       ],
       // Tuesday
       [
@@ -27,7 +27,7 @@ export const CALENDAR_DATA = [
         {title: 'Lunch', start: '11:30'},
         {title: 'Math - Group 2', start: '12:15'},
         {title: 'Break', start: '12:45'},
-        {title: 'Science / Social Studies', start: '13:00'},
+        {title: 'Science / Social Studies', start: '13:00', end: '13:30'},
       ],
       // Wednesday
       [
@@ -51,7 +51,7 @@ export const CALENDAR_DATA = [
         {title: 'Lunch', start: '11:30'},
         {title: 'Math - Group 2', start: '12:15'},
         {title: 'Break', start: '12:45'},
-        {title: 'Science / Social Studies', start: '13:00'},
+        {title: 'Science / Social Studies', start: '13:00', end: '13:30'},
       ],
       // Friday
       [
@@ -64,7 +64,7 @@ export const CALENDAR_DATA = [
         {title: 'Lunch', start: '11:30'},
         {title: 'Math - Group 2', start: '12:15'},
         {title: 'Break', start: '12:45'},
-        {title: 'Science / Social Studies', start: '13:00'},
+        {title: 'Science / Social Studies', start: '13:00', end: '13:30'},
       ],
     ],
   },
