@@ -295,8 +295,8 @@ function App() {
         background: white;
         display: grid;
         height: calc(100vh - 80px);
-        margin: 40px 40px 40px 80px;
-        width: calc(100vw - 120px);
+        margin: 40px 40px 40px 120px;
+        width: calc(100vw - 160px);
         grid-template-columns: auto;
         grid-template-rows: auto;
         grid-auto-rows: minmax(0, 1fr);
@@ -309,7 +309,7 @@ function App() {
             font-size: 80%;
             padding-right: 8px;
             text-align: right;
-            transform: translateY(-3px);
+            transform: translateY(-6px);
           `}
           key={`label-${t.toString()}`}
           style={{
@@ -370,6 +370,7 @@ function App() {
           },
         ),
       ])}
+
       {Temporal.Time.compare(currentTime, START_TIME) >= 0 &&
         Temporal.Time.compare(currentTime, END_TIME) <= 0 && (
           <div
@@ -387,13 +388,14 @@ function App() {
                 color: red;
                 position: absolute;
                 right: calc(100% + 4px);
-                top: -11px;
+                top: -16px;
                 white-space: nowrap;
               `}>
               {timeFormatter.format(currentTime)}
             </div>
           </div>
         )}
+
       {isPlayingAudio ? (
         <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
       ) : (
