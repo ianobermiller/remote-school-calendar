@@ -90,7 +90,7 @@ export const CALENDAR_DATA = [
         {title: 'Math', start: '09:45'},
         {title: 'Break', start: '10:30'},
         {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Reading', start: '11:30'},
+        {title: 'Art / Music', start: '11:30'},
         {title: 'Lunch', start: '12:00'},
         {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
         {
@@ -117,7 +117,7 @@ export const CALENDAR_DATA = [
         {title: 'Math', start: '09:45'},
         {title: 'Break', start: '10:30'},
         {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Reading', start: '11:30'},
+        {title: 'Art / Music', start: '11:30'},
         {title: 'Lunch', start: '12:00'},
         {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
         {
