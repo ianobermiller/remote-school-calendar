@@ -376,7 +376,7 @@ function App() {
         Temporal.Time.compare(currentTime, END_TIME) <= 0 && (
           <div
             className={css`
-              border-top: solid 2px red;
+              border-top: solid 4px red;
               position: relative;
             `}
             style={{
@@ -387,6 +387,7 @@ function App() {
             <div
               className={css`
                 color: red;
+                font-weight: bold;
                 position: absolute;
                 right: calc(100% + 4px);
                 top: -16px;
@@ -400,6 +401,7 @@ function App() {
       {isPlayingAudio && (
         <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
       )}
+
       {isShowingOverlay && (
         <div
           className={css`
