@@ -227,10 +227,9 @@ function CurrentTimeIndicator({currentTime}) {
       <div
         className={css`
           color: red;
-          font-weight: bold;
           position: absolute;
           right: calc(100% + 4px);
-          top: -16px;
+          top: -17px;
           white-space: nowrap;
         `}>
         {timeFormatter.format(currentTime)}
