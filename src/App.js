@@ -187,6 +187,13 @@ function CalendarEvent({event, calendar, calendarIndex}) {
         margin-bottom: 2px;
         margin-left: 8px;
       `}
+      onPointerDown={() => {
+        if ('speechSynthesis' in window) {
+          const msg = new SpeechSynthesisUtterance();
+          msg.text = event.title;
+          window.speechSynthesis.speak(msg);
+        }
+      }}
       style={{
         background,
         gridColumn: calendarIndex + 2,
