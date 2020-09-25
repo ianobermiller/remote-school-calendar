@@ -15,6 +15,8 @@ const START_TIME = Temporal.Time.from({hour: 8, minute: 30});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
 const LABEL_STEP = Temporal.Duration.from({minutes: 30});
 
+const SMALL_SCREEN = '(max-width: 400px)';
+
 const CALENDARS = CALENDAR_DATA.map(cal => ({
   ...cal,
   eventsByDay: cal.eventsByDay.map((events, dayIndex) =>
@@ -76,13 +78,21 @@ function App() {
       className={css`
         background: white;
         display: grid;
-        height: calc(100vh - 80px);
-        margin: 40px 40px 40px 120px;
-        width: calc(100vw - 160px);
+        height: 100vh;
+        max-height: -webkit-fill-available;
+        padding: 40px 40px 40px 120px;
+        width: 100vw100vh;
         grid-template-columns: auto;
         grid-template-rows: auto;
         grid-auto-rows: minmax(0, 1fr);
         grid-auto-columns: minmax(0, 1fr);
+
+        @media ${SMALL_SCREEN} {
+          font-size: 60%;
+          padding: 10px;
+          width: 100vw;
+          height: 100vh;
+        }
       `}>
       {rows.map((t, i) => (
         <TimeRow key={`label-${t.toString()}`} time={t} />
@@ -115,32 +125,34 @@ function App() {
         <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
       )}
 
-      <div
-        className={css`
-          cursor: pointer;
-          padding: 12px;
-          position: fixed;
-          right: 0;
-          top: 0;
-        `}>
-        {isPlayingAudio ? (
-          <CompressIcon
-            color="#aaa"
-            onClick={() => {
-              setIsPlayingAudio(false);
-              document.exitFullscreen();
-            }}
-          />
-        ) : (
-          <ExpandIcon
-            color="#aaa"
-            onClick={() => {
-              setIsPlayingAudio(true);
-              document.body.firstElementChild.requestFullscreen();
-            }}
-          />
-        )}
-      </div>
+      {document.exitFullscreen && (
+        <div
+          className={css`
+            cursor: pointer;
+            padding: 12px;
+            position: fixed;
+            right: 0;
+            top: 0;
+          `}>
+          {isPlayingAudio ? (
+            <CompressIcon
+              color="#aaa"
+              onClick={() => {
+                setIsPlayingAudio(false);
+                document.exitFullscreen();
+              }}
+            />
+          ) : (
+            <ExpandIcon
+              color="#aaa"
+              onClick={() => {
+                setIsPlayingAudio(true);
+                document.body.firstElementChild.requestFullscreen();
+              }}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -155,6 +167,10 @@ function TimeRow({time}) {
           padding-right: 8px;
           text-align: right;
           transform: translateY(-6px);
+
+          @media ${SMALL_SCREEN} {
+            width: 30px;
+          }
         `}
         style={{
           gridColumn: 1,
@@ -230,6 +246,8 @@ function CurrentTimeIndicator({currentTime}) {
     return null;
   }
 
+  const isSmall = window.matchMedia(SMALL_SCREEN).matches;
+
   return (
     <div
       className={css`
@@ -241,16 +259,18 @@ function CurrentTimeIndicator({currentTime}) {
         gridColumnEnd: CALENDARS.length + 2,
         gridRow: toGridRow(currentTime),
       }}>
-      <div
-        className={css`
-          color: red;
-          position: absolute;
-          right: calc(100% + 4px);
-          top: -17px;
-          white-space: nowrap;
-        `}>
-        {timeFormatter.format(currentTime)}
-      </div>
+      {!isSmall && (
+        <div
+          className={css`
+            color: red;
+            position: absolute;
+            right: calc(100% + 4px);
+            top: -17px;
+            white-space: nowrap;
+          `}>
+          {timeFormatter.format(currentTime)}
+        </div>
+      )}
     </div>
   );
 }
