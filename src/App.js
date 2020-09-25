@@ -1,10 +1,14 @@
 import {css} from 'emotion';
 import {Temporal} from 'proposal-temporal';
 import React, {useEffect, useState} from 'react';
-import {FaCompress, FaExpand} from 'react-icons/fa';
+import {
+  FaCompress as CompressIcon,
+  FaExpand as ExpandIcon,
+} from 'react-icons/fa';
 import {CALENDAR_DATA} from './CalendarData';
 import createSilentAudio from './createSilentAudio';
 
+// Play silent audio so that Portal will not turn on the screensaver
 const audioSrc = createSilentAudio(10);
 
 const START_TIME = Temporal.Time.from({hour: 8, minute: 30});
@@ -120,7 +124,7 @@ function App() {
           top: 0;
         `}>
         {isPlayingAudio ? (
-          <FaCompress
+          <CompressIcon
             color="#aaa"
             onClick={() => {
               setIsPlayingAudio(false);
@@ -128,7 +132,7 @@ function App() {
             }}
           />
         ) : (
-          <FaExpand
+          <ExpandIcon
             color="#aaa"
             onClick={() => {
               setIsPlayingAudio(true);
