@@ -35,7 +35,9 @@ const CALENDARS = CALENDAR_DATA.map(cal => ({
         color = '#999';
         opacity = 0.6;
       }
-      if (lower.includes('independent') || lower.includes('seesaw')) {
+      if (
+        ['independent', 'seesaw', 'office'].some(term => lower.includes(term))
+      ) {
         opacity = 0.6;
       }
       return {
