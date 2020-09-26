@@ -2,6 +2,8 @@ import {css} from 'emotion';
 import {Temporal} from 'proposal-temporal';
 import React, {useEffect, useState} from 'react';
 import {
+  FaAngleLeft as LeftIcon,
+  FaAngleRight as RightIcon,
   FaCompress as CompressIcon,
   FaExpand as ExpandIcon,
 } from 'react-icons/fa';
@@ -16,6 +18,13 @@ const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
 const LABEL_STEP = Temporal.Duration.from({minutes: 30});
 
 const SMALL_SCREEN = '(max-width: 400px)';
+
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+  weekday: 'long',
+  month: 'numeric',
+  day: 'numeric',
+  timeZone: Temporal.now.timeZone(),
+});
 
 const CALENDARS = CALENDAR_DATA.map(cal => ({
   ...cal,
@@ -58,13 +67,24 @@ const timeFormatter = new Intl.DateTimeFormat(undefined, {
 });
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(Temporal.now.time());
+  const [currentDateTime, setCurrentDateTime] = useState(
+    Temporal.now.dateTime(),
+  );
   useEffect(() => {
     const id = setInterval(() => {
-      setCurrentTime(Temporal.now.time());
-    }, 1000 * 60);
+      setCurrentDateTime(previous => {
+        // Only increment the time if we are on the current day
+        const newDateTime = Temporal.now.dateTime();
+        if (previous.toDate().equals(newDateTime.toDate())) {
+          return newDateTime;
+        }
+        return previous;
+      });
+    }, 1000 * 10);
     return () => clearInterval(id);
   }, []);
+
+  console.log(currentDateTime);
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
@@ -110,7 +130,7 @@ function App() {
 
       {CALENDARS.map((cal, calIndex) =>
         (
-          cal.eventsByDay[Temporal.now.date().dayOfWeek - 1] ?? []
+          cal.eventsByDay[currentDateTime.dayOfWeek - 1] ?? []
         ).map((ev, evIndex) => (
           <CalendarEvent
             calendar={cal}
@@ -121,7 +141,12 @@ function App() {
         )),
       )}
 
-      <CurrentTimeIndicator currentTime={currentTime} />
+      <DatePicker
+        currentDateTime={currentDateTime}
+        setCurrentDateTime={setCurrentDateTime}
+      />
+
+      <CurrentTimeIndicator currentDateTime={currentDateTime} />
 
       {isPlayingAudio && (
         <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
@@ -131,6 +156,7 @@ function App() {
         <div
           className={css`
             cursor: pointer;
+            font-size: 2em;
             padding: 12px;
             position: fixed;
             right: 0;
@@ -240,10 +266,52 @@ function CalendarHeader({index, calendar}) {
   );
 }
 
-function CurrentTimeIndicator({currentTime}) {
+function DatePicker({currentDateTime, setCurrentDateTime}) {
+  const buttonStyle = css`
+    cursor: pointer;
+    padding: 4px;
+  `;
+  return (
+    <div
+      className={css`
+        color: #666;
+        display: flex;
+        font-size: 80%;
+        left: 50%;
+        position: fixed;
+        top: 4px;
+        transform: translateX(-50%);
+      `}>
+      <LeftIcon
+        className={buttonStyle}
+        onPointerDown={() => {
+          setCurrentDateTime(d => d.minus({days: 1}));
+        }}
+        size="1.3em"
+      />
+      <div
+        className={css`
+          text-align: center;
+          width: 160px;
+        `}>
+        {dateFormatter.format(currentDateTime)}
+      </div>
+      <RightIcon
+        className={buttonStyle}
+        onPointerDown={() => {
+          setCurrentDateTime(d => d.plus({days: 1}));
+        }}
+        size="1.3em"
+      />
+    </div>
+  );
+}
+
+function CurrentTimeIndicator({currentDateTime}) {
+  const time = currentDateTime.toTime();
   if (
-    Temporal.Time.compare(currentTime, START_TIME) < 0 ||
-    Temporal.Time.compare(currentTime, END_TIME) > 0
+    Temporal.Time.compare(time, START_TIME) < 0 ||
+    Temporal.Time.compare(time, END_TIME) > 0
   ) {
     return null;
   }
@@ -259,7 +327,7 @@ function CurrentTimeIndicator({currentTime}) {
       style={{
         gridColumnStart: 1,
         gridColumnEnd: CALENDARS.length + 2,
-        gridRow: toGridRow(currentTime),
+        gridRow: toGridRow(currentDateTime.toTime()),
       }}>
       {!isSmall && (
         <div
@@ -270,7 +338,7 @@ function CurrentTimeIndicator({currentTime}) {
             top: -17px;
             white-space: nowrap;
           `}>
-          {timeFormatter.format(currentTime)}
+          {timeFormatter.format(currentDateTime)}
         </div>
       )}
     </div>
