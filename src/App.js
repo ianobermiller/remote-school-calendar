@@ -84,8 +84,6 @@ function App() {
     return () => clearInterval(id);
   }, []);
 
-  console.log(currentDateTime);
-
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   const rows = [];
@@ -156,7 +154,7 @@ function App() {
         <div
           className={css`
             cursor: pointer;
-            font-size: 2em;
+            font-size: 1.8em;
             padding: 12px;
             position: fixed;
             right: 0;
@@ -268,8 +266,11 @@ function CalendarHeader({index, calendar}) {
 
 function DatePicker({currentDateTime, setCurrentDateTime}) {
   const buttonStyle = css`
+    border: none;
+    background: none;
+    color: inherit;
     cursor: pointer;
-    padding: 4px;
+    padding: 10px 4px 4px 4px;
   `;
   return (
     <div
@@ -279,16 +280,17 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
         font-size: 80%;
         left: 50%;
         position: fixed;
-        top: 4px;
+        top: 0;
         transform: translateX(-50%);
+        align-items: center;
       `}>
-      <LeftIcon
+      <button
         className={buttonStyle}
         onPointerDown={() => {
           setCurrentDateTime(d => d.minus({days: 1}));
-        }}
-        size="1.3em"
-      />
+        }}>
+        <LeftIcon size="1.3em" />
+      </button>
       <div
         className={css`
           text-align: center;
@@ -296,13 +298,13 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
         `}>
         {dateFormatter.format(currentDateTime)}
       </div>
-      <RightIcon
+      <button
         className={buttonStyle}
         onPointerDown={() => {
           setCurrentDateTime(d => d.plus({days: 1}));
-        }}
-        size="1.3em"
-      />
+        }}>
+        <RightIcon size="1.3em" />
+      </button>
     </div>
   );
 }
