@@ -7,7 +7,7 @@ export const CALENDAR_DATA = [
       [
         {title: 'Class Meeting', start: '08:30'},
         {title: 'Art / PE / Music', start: '09:00'},
-        {title: 'ELA Group 1', start: '9:30'},
+        {title: 'ELA Group 1', start: '09:30'},
         {title: 'ELA - Seesaw', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'Math - Group 1', start: '11:00'},
@@ -20,7 +20,7 @@ export const CALENDAR_DATA = [
       [
         {title: 'Class Meeting', start: '08:30'},
         {title: 'Art / PE / Music', start: '09:00'},
-        {title: 'ELA Group 1', start: '9:30'},
+        {title: 'ELA Group 1', start: '09:30'},
         {title: 'ELA - Seesaw', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'Math - Group 1', start: '11:00'},
@@ -44,7 +44,7 @@ export const CALENDAR_DATA = [
       [
         {title: 'Class Meeting', start: '08:30'},
         {title: 'Art / PE / Music', start: '09:00'},
-        {title: 'ELA Group 1', start: '9:30'},
+        {title: 'ELA Group 1', start: '09:30'},
         {title: 'ELA - Seesaw', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'Math - Group 1', start: '11:00'},
@@ -57,7 +57,7 @@ export const CALENDAR_DATA = [
       [
         {title: 'Class Meeting', start: '08:30'},
         {title: 'Art / PE / Music', start: '09:00'},
-        {title: 'ELA Group 1', start: '9:30'},
+        {title: 'ELA Group 1', start: '09:30'},
         {title: 'ELA - Seesaw', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'Math - Group 1', start: '11:00'},
