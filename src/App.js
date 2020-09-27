@@ -229,7 +229,7 @@ function CalendarEvent({event, calendar, calendarIndex}) {
         margin-bottom: 2px;
         margin-left: 8px;
       `}
-      onPointerDown={() => {
+      onClick={() => {
         if ('speechSynthesis' in window) {
           const msg = new SpeechSynthesisUtterance();
           msg.text = event.title;
@@ -286,7 +286,7 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
       `}>
       <button
         className={buttonStyle}
-        onPointerDown={() => {
+        onClick={() => {
           setCurrentDateTime(d => d.minus({days: 1}));
         }}>
         <LeftIcon size="1.3em" />
@@ -300,7 +300,7 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
       </div>
       <button
         className={buttonStyle}
-        onPointerDown={() => {
+        onClick={() => {
           setCurrentDateTime(d => d.plus({days: 1}));
         }}>
         <RightIcon size="1.3em" />
