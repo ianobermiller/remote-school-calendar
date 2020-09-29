@@ -100,18 +100,15 @@ function App() {
         display: grid;
         height: 100vh;
         max-height: -webkit-fill-available;
-        padding: 40px 40px 40px 120px;
-        width: 100vw100vh;
+        padding: 20px;
+        width: 100vw;
         grid-template-columns: auto;
         grid-template-rows: auto;
         grid-auto-rows: minmax(0, 1fr);
         grid-auto-columns: minmax(0, 1fr);
 
         @media ${SMALL_SCREEN} {
-          font-size: 60%;
           padding: 10px;
-          width: 100vw;
-          height: 100vh;
         }
       `}>
       {rows.map((t, i) => (
@@ -154,7 +151,7 @@ function App() {
         <div
           className={css`
             cursor: pointer;
-            font-size: 1.8em;
+            font-size: 40px;
             padding: 12px;
             position: fixed;
             right: 0;
@@ -189,12 +186,13 @@ function TimeRow({time}) {
       <div
         className={css`
           color: #666;
-          font-size: 80%;
+          font-size: 18px;
           padding-right: 8px;
           text-align: right;
           transform: translateY(-6px);
 
           @media ${SMALL_SCREEN} {
+            font-size: 10px;
             width: 30px;
           }
         `}
@@ -225,9 +223,14 @@ function CalendarEvent({event, calendar, calendarIndex}) {
       className={css`
         border-radius: 4px;
         color: white;
+        font-size: 44px;
         padding: 4px;
         margin-bottom: 2px;
         margin-left: 8px;
+
+        @media ${SMALL_SCREEN} {
+          font-size: 16px;
+        }
       `}
       onClick={() => {
         if ('speechSynthesis' in window) {
@@ -252,8 +255,9 @@ function CalendarHeader({index, calendar}) {
   return (
     <h1
       className={css`
-        font-size: 120%;
-        margin: 0 0 16px 8px;
+        font-size: 32px;
+        margin: 0 0 0 8px;
+        text-align: center;
       `}
       style={{
         gridColumn: index + 2,
@@ -277,7 +281,7 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
       className={css`
         color: #666;
         display: flex;
-        font-size: 80%;
+        font-size: 18px;
         left: 50%;
         position: fixed;
         top: 0;
@@ -318,31 +322,40 @@ function CurrentTimeIndicator({currentDateTime}) {
     return null;
   }
 
-  const isSmall = window.matchMedia(SMALL_SCREEN).matches;
-
   return (
     <div
       className={css`
         border-top: solid 4px red;
+        grid-column-start: 1;
         position: relative;
+
+        @media ${SMALL_SCREEN} {
+          border-top: solid 2px red;
+        }
       `}
       style={{
-        gridColumnStart: 1,
         gridColumnEnd: CALENDARS.length + 2,
         gridRow: toGridRow(currentDateTime.toTime()),
       }}>
-      {!isSmall && (
-        <div
-          className={css`
-            color: red;
-            position: absolute;
-            right: calc(100% + 4px);
-            top: -17px;
-            white-space: nowrap;
-          `}>
-          {timeFormatter.format(currentDateTime)}
-        </div>
-      )}
+      <div
+        className={css`
+          background: red;
+          color: white;
+          font-size: 24px;
+          white-space: nowrap;
+          padding: 0 4px;
+          position: absolute;
+          top: -28px;
+          left: -20px;
+
+          @media ${SMALL_SCREEN} {
+            font-size: 12px;
+            left: -6px;
+            top: -15px;
+          }
+        `}>
+        {timeFormatter.format(currentDateTime)}
+      </div>
     </div>
   );
 }
