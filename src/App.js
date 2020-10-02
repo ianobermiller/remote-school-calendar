@@ -10,9 +10,6 @@ import {
 import {CALENDAR_DATA} from './CalendarData';
 import createSilentAudio from './createSilentAudio';
 
-// Play silent audio so that Portal will not turn on the screensaver
-const audioSrc = createSilentAudio(10);
-
 const START_TIME = Temporal.Time.from({hour: 8, minute: 30});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
 const LABEL_STEP = Temporal.Duration.from({minutes: 30});
@@ -84,8 +81,6 @@ function App() {
     return () => clearInterval(id);
   }, []);
 
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-
   const rows = [];
   let current = START_TIME;
   while (Temporal.Time.compare(current, END_TIME) <= 0) {
@@ -100,7 +95,7 @@ function App() {
         display: grid;
         height: 100vh;
         max-height: -webkit-fill-available;
-        padding: 20px;
+        padding: 20px 20px 20px 200px;
         width: 100vw;
         grid-template-columns: auto;
         grid-template-rows: auto;
@@ -143,39 +138,7 @@ function App() {
 
       <CurrentTimeIndicator currentDateTime={currentDateTime} />
 
-      {isPlayingAudio && (
-        <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
-      )}
-
-      {document.exitFullscreen && (
-        <div
-          className={css`
-            cursor: pointer;
-            font-size: 40px;
-            padding: 12px;
-            position: fixed;
-            right: 0;
-            top: 0;
-          `}>
-          {isPlayingAudio ? (
-            <CompressIcon
-              color="#aaa"
-              onClick={() => {
-                setIsPlayingAudio(false);
-                document.exitFullscreen();
-              }}
-            />
-          ) : (
-            <ExpandIcon
-              color="#aaa"
-              onClick={() => {
-                setIsPlayingAudio(true);
-                document.body.firstElementChild.requestFullscreen();
-              }}
-            />
-          )}
-        </div>
-      )}
+      <FullscreenButton />
     </div>
   );
 }
@@ -217,16 +180,19 @@ function TimeRow({time}) {
 }
 
 function CalendarEvent({event, calendar, calendarIndex}) {
-  let background = event.color || calendar.color || 'rgb(63, 81, 181)';
+  const background = event.color || calendar.color || 'rgb(63, 81, 181)';
+  const gridRowStart = toGridRow(event.start);
+  const gridRowEnd = toGridRow(event.end);
   return (
     <div
       className={css`
         border-radius: 4px;
         color: white;
-        font-size: 44px;
-        padding: 4px;
+        font-size: ${gridRowEnd - gridRowStart > 3 ? 44 : 24}px;
+        line-height: 100%;
         margin-bottom: 2px;
         margin-left: 8px;
+        padding: 4px;
 
         @media ${SMALL_SCREEN} {
           font-size: 16px;
@@ -242,8 +208,8 @@ function CalendarEvent({event, calendar, calendarIndex}) {
       style={{
         background,
         gridColumn: calendarIndex + 2,
-        gridRowStart: toGridRow(event.start),
-        gridRowEnd: toGridRow(event.end),
+        gridRowStart,
+        gridRowEnd,
         opacity: event.opacity,
       }}>
       {event.title}
@@ -279,14 +245,19 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
   return (
     <div
       className={css`
+        align-items: center;
         color: #666;
         display: flex;
         font-size: 18px;
-        left: 50%;
         position: fixed;
-        top: 0;
-        transform: translateX(-50%);
-        align-items: center;
+        left: 4px;
+        top: 4px;
+
+        @media ${SMALL_SCREEN} {
+          left: 50%;
+          top: 0;
+          transform: translateX(-50%);
+        }
       `}>
       <button
         className={buttonStyle}
@@ -341,22 +312,78 @@ function CurrentTimeIndicator({currentDateTime}) {
         className={css`
           background: red;
           color: white;
-          font-size: 24px;
-          white-space: nowrap;
+          font-size: 48px;
+          left: -200px;
           padding: 0 4px;
           position: absolute;
-          top: -28px;
-          left: -20px;
+          text-align: center;
+          transform: translateY(-100%);
+          white-space: nowrap;
+          width: 200px;
 
           @media ${SMALL_SCREEN} {
             font-size: 12px;
-            left: -6px;
-            top: -15px;
+            left: -12px;
+            width: auto;
           }
         `}>
         {timeFormatter.format(currentDateTime)}
       </div>
     </div>
+  );
+}
+
+// Play silent audio so that Portal will not turn on the screensaver
+const audioSrc = createSilentAudio(10);
+
+function FullscreenButton() {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    return () =>
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+  }, []);
+
+  if (!document.fullscreenEnabled) {
+    return null;
+  }
+
+  return (
+    <>
+      <div
+        className={css`
+          cursor: pointer;
+          font-size: 32px;
+          padding: 12px;
+          position: fixed;
+          right: 0;
+          top: 0;
+        `}>
+        {isFullscreen ? (
+          <CompressIcon
+            color="#aaa"
+            onClick={() => {
+              document.exitFullscreen();
+            }}
+          />
+        ) : (
+          <ExpandIcon
+            color="#aaa"
+            onClick={() => {
+              document.body.firstElementChild.requestFullscreen();
+            }}
+          />
+        )}
+      </div>
+
+      {isFullscreen && (
+        <audio autoPlay={true} controls={false} loop={true} src={audioSrc} />
+      )}
+    </>
   );
 }
 
