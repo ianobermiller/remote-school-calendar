@@ -88,7 +88,7 @@ function App() {
         display: grid;
         height: 100vh;
         max-height: -webkit-fill-available;
-        padding: 20px 20px 20px 200px;
+        padding: 12px 20px 20px 200px;
         width: 100vw;
         grid-template-columns: auto;
         grid-template-rows: auto;
@@ -215,11 +215,12 @@ function CalendarHeader({index, calendar}) {
     <h1
       className={css`
         font-size: 32px;
-        margin: 0 0 0 8px;
+        margin: 0 0 8px 8px;
         text-align: center;
 
         @media ${SMALL_SCREEN} {
           font-size: 20px;
+          margin: 0 0 0 8px;
         }
       `}
       style={{
