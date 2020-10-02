@@ -301,11 +301,36 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
 
 function CurrentTimeIndicator({currentDateTime}) {
   const time = currentDateTime.toTime();
-  if (
-    Temporal.Time.compare(time, START_TIME) < 0 ||
-    Temporal.Time.compare(time, END_TIME) > 0
-  ) {
-    return null;
+  const isBeforeStart = Temporal.Time.compare(time, START_TIME) < 0;
+  const isAfterEnd = Temporal.Time.compare(time, END_TIME) > 0;
+
+  if (isBeforeStart || isAfterEnd) {
+    return (
+      <div
+        className={css`
+          background: red;
+          border-radius: 4px;
+          color: white;
+          font-size: 48px;
+          left: 8px;
+          padding: 0 4px;
+          position: fixed;
+          text-align: center;
+          width: 190px;
+
+          @media ${SMALL_SCREEN} {
+            font-size: 12px;
+            left: -12px;
+            width: auto;
+          }
+        `}
+        style={{
+          bottom: isAfterEnd ? 12 : null,
+          top: isBeforeStart ? 64 : null,
+        }}>
+        {timeFormatter.format(currentDateTime)}
+      </div>
+    );
   }
 
   return (
