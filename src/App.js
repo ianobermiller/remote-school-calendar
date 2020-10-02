@@ -96,7 +96,7 @@ function App() {
         grid-auto-columns: minmax(0, 1fr);
 
         @media ${SMALL_SCREEN} {
-          padding: 10px;
+          padding: 40px 10px 10px 10px;
         }
       `}>
       {rows.map((t, i) => (
@@ -217,6 +217,10 @@ function CalendarHeader({index, calendar}) {
         font-size: 32px;
         margin: 0 0 0 8px;
         text-align: center;
+
+        @media ${SMALL_SCREEN} {
+          font-size: 20px;
+        }
       `}
       style={{
         gridColumn: index + 2,
@@ -238,6 +242,8 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
 });
 
 function DatePicker({currentDateTime, setCurrentDateTime}) {
+  const isSmall = window.matchMedia(SMALL_SCREEN).matches;
+
   const buttonStyle = css`
     border: none;
     background: none;
@@ -247,6 +253,7 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
     line-height: 20px;
     padding: 4px;
   `;
+
   return (
     <div
       className={css`
@@ -277,7 +284,7 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
           width: 100px;
         `}>
         {dayOfWeekFormatter.format(currentDateTime)}
-        <br />
+        {!isSmall && <br />}
         {dateFormatter.format(currentDateTime)}
       </div>
       <button
