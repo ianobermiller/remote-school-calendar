@@ -320,20 +320,21 @@ function CurrentTimeIndicator({currentDateTime}) {
       `}
       style={{
         gridColumnEnd: CALENDARS.length + 2,
-        gridRow: toGridRow(currentDateTime.toTime()),
+        gridRow: toGridRow(currentDateTime.toTime(), Math.round),
       }}>
       <div
         className={css`
           background: red;
+          border-radius: 4px 4px 0 4px;
           color: white;
           font-size: 48px;
-          left: -200px;
+          left: -190px;
           padding: 0 4px;
           position: absolute;
           text-align: center;
           transform: translateY(-100%);
           white-space: nowrap;
-          width: 200px;
+          width: 190px;
 
           @media ${SMALL_SCREEN} {
             font-size: 12px;
@@ -401,11 +402,9 @@ function FullscreenButton() {
   );
 }
 
-function toGridRow(time) {
+function toGridRow(time, round = Math.floor) {
   return (
-    Math.floor(
-      time.difference(START_TIME, {largestUnit: 'minutes'}).minutes / 5,
-    ) +
+    round(time.difference(START_TIME, {largestUnit: 'minutes'}).minutes / 5) +
     1 +
     // Add an extra for the header
     1
