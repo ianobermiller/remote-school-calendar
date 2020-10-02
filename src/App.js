@@ -16,13 +16,6 @@ const LABEL_STEP = Temporal.Duration.from({minutes: 30});
 
 const SMALL_SCREEN = '(max-width: 400px)';
 
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-  weekday: 'long',
-  month: 'numeric',
-  day: 'numeric',
-  timeZone: Temporal.now.timeZone(),
-});
-
 const CALENDARS = CALENDAR_DATA.map(cal => ({
   ...cal,
   eventsByDay: cal.eventsByDay.map((events, dayIndex) =>
@@ -234,13 +227,25 @@ function CalendarHeader({index, calendar}) {
   );
 }
 
+const dayOfWeekFormatter = new Intl.DateTimeFormat(undefined, {
+  weekday: 'long',
+  timeZone: Temporal.now.timeZone(),
+});
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+  month: 'numeric',
+  day: 'numeric',
+  timeZone: Temporal.now.timeZone(),
+});
+
 function DatePicker({currentDateTime, setCurrentDateTime}) {
   const buttonStyle = css`
     border: none;
     background: none;
     color: inherit;
     cursor: pointer;
-    padding: 10px 4px 4px 4px;
+    font-size: 32px;
+    line-height: 20px;
+    padding: 4px;
   `;
   return (
     <div
@@ -248,10 +253,10 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
         align-items: center;
         color: #666;
         display: flex;
-        font-size: 18px;
+        font-size: 20px;
         position: fixed;
-        left: 4px;
-        top: 4px;
+        left: 8px;
+        top: 8px;
 
         @media ${SMALL_SCREEN} {
           left: 50%;
@@ -264,13 +269,15 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
         onClick={() => {
           setCurrentDateTime(d => d.minus({days: 1}));
         }}>
-        <LeftIcon size="1.3em" />
+        <LeftIcon />
       </button>
       <div
         className={css`
           text-align: center;
-          width: 160px;
+          width: 100px;
         `}>
+        {dayOfWeekFormatter.format(currentDateTime)}
+        <br />
         {dateFormatter.format(currentDateTime)}
       </div>
       <button
@@ -278,7 +285,7 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
         onClick={() => {
           setCurrentDateTime(d => d.plus({days: 1}));
         }}>
-        <RightIcon size="1.3em" />
+        <RightIcon />
       </button>
     </div>
   );
