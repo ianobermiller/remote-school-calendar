@@ -81,7 +81,8 @@ export const CALENDAR_DATA = [
         {title: 'PE - Live', start: '11:00'},
         {title: 'Reading', start: '11:30'},
         {title: 'Lunch', start: '12:00'},
-        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
+        {title: 'Science / Social Studies', start: '12:45'},
+        {title: 'Independent Work', start: '13:15', end: '14:30'},
       ],
       // Tuesday
       [
@@ -90,14 +91,12 @@ export const CALENDAR_DATA = [
         {title: 'Math', start: '09:45'},
         {title: 'Break', start: '10:30'},
         {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Art / Music', start: '11:30'},
+        {title: 'Reading', start: '11:30'},
         {title: 'Lunch', start: '12:00'},
         {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
-        {
-          title: 'Reading',
-          start: '13:20',
-          end: '13:50',
-        },
+        {title: 'Small Group - Sockeye', start: '13:20', end: '13:40'},
+        {title: 'Independent Work', start: '13:40', end: '13:55'},
+        {title: 'Music - Seesaw', start: '13:55', end: '14:25'},
       ],
       // Wednesday
       [
@@ -107,10 +106,10 @@ export const CALENDAR_DATA = [
         {title: 'Independent Work / Small Groups', start: '10:00'},
         {title: 'Break', start: '10:30'},
         {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Handwriting', start: '11:30'},
+        {title: 'Science / Social Studies', start: '11:30'},
         {title: 'Lunch', start: '12:00', end: '12:45'},
-        {title: 'Break', start: '12:45'},
-        {title: 'Coho Small Group', start: '13:35', end: '13:50'},
+        {title: 'Class Connections / Community Meeting', start: '12:45'},
+        {title: 'Independent Work', start: '13:15', end: '13:55'},
       ],
       // Thursday
       [
@@ -119,14 +118,10 @@ export const CALENDAR_DATA = [
         {title: 'Math', start: '09:45'},
         {title: 'Break', start: '10:30'},
         {title: 'PE - Seesaw', start: '11:00'},
-        {title: 'Art / Music', start: '11:30'},
+        {title: 'Reading', start: '11:30'},
         {title: 'Lunch', start: '12:00'},
-        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
-        {
-          title: 'Reading',
-          start: '13:20',
-          end: '13:50',
-        },
+        {title: 'Science / Social Studies', start: '12:45'},
+        {title: 'Independent Work', start: '13:15', end: '14:30'},
       ],
       // Friday
       [
@@ -137,7 +132,9 @@ export const CALENDAR_DATA = [
         {title: 'PE - Seesaw', start: '11:00'},
         {title: 'Reading', start: '11:30'},
         {title: 'Lunch', start: '12:00'},
-        {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
+        {title: 'Science / Social Studies', start: '12:45'},
+        {title: 'Independent Work', start: '13:15', end: '13:55'},
+        {title: 'Music - Seesaw', start: '13:55', end: '14:25'},
       ],
     ],
   },
