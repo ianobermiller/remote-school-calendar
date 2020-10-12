@@ -195,7 +195,7 @@ export const CALENDAR_DATA = [
         {title: 'Lunch', start: '12:00'},
         {title: 'Independent Work', start: '12:45'},
         {title: 'Social Studies', start: '13:10'},
-        {title: 'Break', start: '13:30'},
+        {title: 'Small Group 4', start: '13:10', end: '13:50'},
         {title: 'Social Studies', start: '14:00', end: '14:30'},
       ],
     ],
