@@ -96,7 +96,7 @@ export const CALENDAR_DATA = [
         {title: 'Science / Social Studies', start: '12:45', end: '13:15'},
         {title: 'Small Group - Sockeye', start: '13:20', end: '13:40'},
         {title: 'Independent Work', start: '13:40', end: '13:55'},
-        {title: 'Music - Seesaw', start: '13:55', end: '14:25'},
+        {title: 'Art - Live', start: '13:55', end: '14:25'},
       ],
       // Wednesday
       [
@@ -134,7 +134,7 @@ export const CALENDAR_DATA = [
         {title: 'Lunch', start: '12:00'},
         {title: 'Science / Social Studies', start: '12:45'},
         {title: 'Independent Work', start: '13:15', end: '13:55'},
-        {title: 'Music - Seesaw', start: '13:55', end: '14:25'},
+        {title: 'Art - LIve', start: '13:55', end: '14:25'},
       ],
     ],
   },
