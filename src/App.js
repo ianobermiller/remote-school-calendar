@@ -195,6 +195,7 @@ function CalendarEvent({event, calendar, calendarIndex}) {
         if ('speechSynthesis' in window) {
           const msg = new SpeechSynthesisUtterance();
           msg.text = event.title;
+          window.speechSynthesis.cancel();
           window.speechSynthesis.speak(msg);
         }
       }}
