@@ -62,14 +62,7 @@ function App() {
   );
   useEffect(() => {
     const id = setInterval(() => {
-      setCurrentDateTime(previous => {
-        // Only increment the time if we are on the current day
-        const newDateTime = Temporal.now.dateTime();
-        if (previous.toDate().equals(newDateTime.toDate())) {
-          return newDateTime;
-        }
-        return previous;
-      });
+      setCurrentDateTime(Temporal.now.dateTime());
     }, 1000 * 10);
     return () => clearInterval(id);
   }, []);
