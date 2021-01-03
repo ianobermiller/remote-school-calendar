@@ -7,8 +7,8 @@ import {
   FaCompress as CompressIcon,
   FaExpand as ExpandIcon,
 } from 'react-icons/fa';
-import {CALENDAR_DATA} from './CalendarData';
 import createSilentAudio from './createSilentAudio';
+import {CALENDAR_DATA} from './data/CalendarData';
 
 const START_TIME = Temporal.Time.from({hour: 8, minute: 30});
 const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
