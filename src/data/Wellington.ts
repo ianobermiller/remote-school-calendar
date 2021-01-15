@@ -54,7 +54,6 @@ export default {
       {title: 'ELA', start: '11:00'},
       {title: 'Lunch', start: '12:00'},
       {title: 'Independent Work', start: '12:45'},
-      {title: 'Small Group 4', start: '13:30', end: '13:50'},
       {title: 'Social Studies', start: '14:00', end: '14:30'},
     ],
   ],
