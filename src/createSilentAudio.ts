@@ -1,6 +1,13 @@
 // https://github.com/edoudou/create-silent-audio/blob/master/index.js
 
-export default function createSilentAudio(time, freq = 44100) {
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+    mozAudioContext?: typeof AudioContext;
+  }
+}
+
+export default function createSilentAudio(time: number, freq: number = 44100) {
   const length = time * freq;
   const AudioContext =
     window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
@@ -12,7 +19,7 @@ export default function createSilentAudio(time, freq = 44100) {
   return URL.createObjectURL(bufferToWave(audioFile, length));
 }
 
-function bufferToWave(abuffer, len) {
+function bufferToWave(abuffer: AudioBuffer, len: number) {
   let numOfChan = abuffer.numberOfChannels,
     length = len * numOfChan * 2 + 44,
     buffer = new ArrayBuffer(length),
@@ -58,12 +65,12 @@ function bufferToWave(abuffer, len) {
   // create Blob
   return new Blob([buffer], {type: 'audio/wav'});
 
-  function setUint16(data) {
+  function setUint16(data: number) {
     view.setUint16(pos, data, true);
     pos += 2;
   }
 
-  function setUint32(data) {
+  function setUint32(data: number) {
     view.setUint32(pos, data, true);
     pos += 4;
   }

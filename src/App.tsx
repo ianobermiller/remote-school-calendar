@@ -1,6 +1,6 @@
 import {css} from 'emotion';
 import {DateTime, Duration} from 'luxon';
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {
   FaAngleLeft as LeftIcon,
   FaAngleRight as RightIcon,
@@ -9,6 +9,20 @@ import {
 } from 'react-icons/fa';
 import createSilentAudio from './createSilentAudio';
 import {CALENDAR_DATA} from './data/CalendarData';
+
+interface CalendarEvent {
+  title: string;
+  start: DateTime;
+  end: DateTime;
+  color: string | undefined;
+  opacity: number;
+}
+
+interface Calendar {
+  name: string;
+  color: string;
+  eventsByDay: Array<Array<CalendarEvent>>;
+}
 
 const TIME_ZONE = 'America/Los_Angeles';
 const START_TIME = DateTime.fromObject({
@@ -25,7 +39,7 @@ const LABEL_STEP = Duration.fromObject({minutes: 30});
 
 const SMALL_SCREEN = '(max-width: 400px)';
 
-const CALENDARS = CALENDAR_DATA.map(cal => ({
+const CALENDARS: Array<Calendar> = CALENDAR_DATA.map(cal => ({
   ...cal,
   eventsByDay: cal.eventsByDay.map((events, dayIndex) =>
     events.map((ev, i) => {
@@ -37,7 +51,7 @@ const CALENDARS = CALENDAR_DATA.map(cal => ({
       }
 
       const lower = ev.title.toLowerCase();
-      let color = ev.color;
+      let color;
       let opacity = 1;
       if (['break', 'lunch'].includes(lower)) {
         color = '#999';
@@ -60,7 +74,7 @@ const CALENDARS = CALENDAR_DATA.map(cal => ({
 }));
 
 const currentTimeZone = DateTime.local().zone;
-function formatTime(dateTime) {
+function formatTime(dateTime: DateTime): string {
   return dateTime
     .setZone(currentTimeZone)
     .toLocaleString({hour: 'numeric', minute: 'numeric'});
@@ -116,7 +130,7 @@ function App() {
         (
           cal.eventsByDay[currentDateTime.weekday - 1] ?? []
         ).map((ev, evIndex) => (
-          <CalendarEvent
+          <CalendarEventEntry
             calendar={cal}
             calendarIndex={calIndex}
             event={ev}
@@ -137,7 +151,7 @@ function App() {
   );
 }
 
-function TimeRow({time}) {
+function TimeRow({time}: {time: DateTime}) {
   return (
     <>
       <div
@@ -173,7 +187,15 @@ function TimeRow({time}) {
   );
 }
 
-function CalendarEvent({event, calendar, calendarIndex}) {
+function CalendarEventEntry({
+  event,
+  calendar,
+  calendarIndex,
+}: {
+  event: CalendarEvent;
+  calendar: Calendar;
+  calendarIndex: number;
+}) {
   const background = event.color || calendar.color || 'rgb(63, 81, 181)';
   const gridRowStart = toGridRow(event.start);
   const gridRowEnd = toGridRow(event.end);
@@ -212,7 +234,13 @@ function CalendarEvent({event, calendar, calendarIndex}) {
   );
 }
 
-function CalendarHeader({index, calendar}) {
+function CalendarHeader({
+  index,
+  calendar,
+}: {
+  index: number;
+  calendar: Calendar;
+}) {
   return (
     <h1
       className={css`
@@ -234,7 +262,13 @@ function CalendarHeader({index, calendar}) {
   );
 }
 
-function DatePicker({currentDateTime, setCurrentDateTime}) {
+function DatePicker({
+  currentDateTime,
+  setCurrentDateTime,
+}: {
+  currentDateTime: DateTime;
+  setCurrentDateTime: Dispatch<SetStateAction<DateTime>>;
+}) {
   const isSmall = window.matchMedia(SMALL_SCREEN).matches;
 
   const buttonStyle = css`
@@ -291,7 +325,7 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
   );
 }
 
-function CurrentTimeIndicator({currentDateTime}) {
+function CurrentTimeIndicator({currentDateTime}: {currentDateTime: DateTime}) {
   const isBeforeStart = currentDateTime < START_TIME;
   const isAfterEnd = currentDateTime > END_TIME;
 
@@ -316,8 +350,8 @@ function CurrentTimeIndicator({currentDateTime}) {
           }
         `}
         style={{
-          bottom: isAfterEnd ? 12 : null,
-          top: isBeforeStart ? 64 : null,
+          bottom: isAfterEnd ? 12 : undefined,
+          top: isBeforeStart ? 64 : undefined,
         }}>
         {formatTime(currentDateTime)}
       </div>
@@ -406,7 +440,7 @@ function FullscreenButton() {
           <ExpandIcon
             color="#aaa"
             onClick={() => {
-              document.body.firstElementChild.requestFullscreen();
+              document.body.firstElementChild?.requestFullscreen();
             }}
           />
         )}
@@ -419,7 +453,7 @@ function FullscreenButton() {
   );
 }
 
-function toGridRow(time, round = Math.floor) {
+function toGridRow(time: DateTime, round = Math.floor): number {
   return (
     round(time.diff(START_TIME, 'minutes').minutes / 5) +
     1 +
@@ -428,8 +462,8 @@ function toGridRow(time, round = Math.floor) {
   );
 }
 
-// eslint-disable-next-line no-unused-vars
-function log(value) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function log<T>(value: T): T {
   console.log(value);
   return value;
 }
