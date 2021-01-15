@@ -337,7 +337,7 @@ function CurrentTimeIndicator({currentDateTime}) {
       `}
       style={{
         gridColumnEnd: CALENDARS.length + 2,
-        gridRow: toGridRow(currentDateTime.toTime(), Math.round),
+        gridRow: toGridRow(currentDateTime, Math.round),
       }}>
       <div
         className={css`
