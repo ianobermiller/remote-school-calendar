@@ -1,5 +1,5 @@
 import {css} from 'emotion';
-import {Temporal} from 'proposal-temporal';
+import {DateTime, Duration} from 'luxon';
 import React, {useEffect, useState} from 'react';
 import {
   FaAngleLeft as LeftIcon,
@@ -10,9 +10,18 @@ import {
 import createSilentAudio from './createSilentAudio';
 import {CALENDAR_DATA} from './data/CalendarData';
 
-const START_TIME = Temporal.Time.from({hour: 8, minute: 30});
-const END_TIME = Temporal.Time.from({hour: 14, minute: 30});
-const LABEL_STEP = Temporal.Duration.from({minutes: 30});
+const TIME_ZONE = 'America/Los_Angeles';
+const START_TIME = DateTime.fromObject({
+  hour: 8,
+  minute: 30,
+  zone: TIME_ZONE,
+});
+const END_TIME = DateTime.fromObject({
+  hour: 14,
+  minute: 30,
+  zone: TIME_ZONE,
+});
+const LABEL_STEP = Duration.fromObject({minutes: 30});
 
 const SMALL_SCREEN = '(max-width: 400px)';
 
@@ -43,33 +52,32 @@ const CALENDARS = CALENDAR_DATA.map(cal => ({
         ...ev,
         color,
         opacity,
-        start: Temporal.Time.from(ev.start),
-        end: Temporal.Time.from(end),
+        start: DateTime.fromISO(ev.start, {zone: TIME_ZONE}),
+        end: DateTime.fromISO(end, {zone: TIME_ZONE}),
       };
     }),
   ),
 }));
 
-const timeFormatter = new Intl.DateTimeFormat(undefined, {
-  hour: 'numeric',
-  minute: 'numeric',
-  timeZone: Temporal.now.timeZone(),
-});
+const currentTimeZone = DateTime.local().zone;
+function formatTime(dateTime) {
+  return dateTime
+    .setZone(currentTimeZone)
+    .toLocaleString({hour: 'numeric', minute: 'numeric'});
+}
 
 function App() {
-  const [currentDateTime, setCurrentDateTime] = useState(
-    Temporal.now.dateTime(),
-  );
+  const [currentDateTime, setCurrentDateTime] = useState(DateTime.local());
   useEffect(() => {
     const id = setInterval(() => {
-      setCurrentDateTime(Temporal.now.dateTime());
+      setCurrentDateTime(DateTime.local());
     }, 1000 * 10);
     return () => clearInterval(id);
   }, []);
 
   const rows = [];
   let current = START_TIME;
-  while (Temporal.Time.compare(current, END_TIME) <= 0) {
+  while (current < END_TIME) {
     rows.push(current);
     current = current.plus(LABEL_STEP);
   }
@@ -106,7 +114,7 @@ function App() {
 
       {CALENDARS.map((cal, calIndex) =>
         (
-          cal.eventsByDay[currentDateTime.dayOfWeek - 1] ?? []
+          cal.eventsByDay[currentDateTime.weekday - 1] ?? []
         ).map((ev, evIndex) => (
           <CalendarEvent
             calendar={cal}
@@ -149,7 +157,7 @@ function TimeRow({time}) {
           gridColumn: 1,
           gridRow: toGridRow(time),
         }}>
-        {timeFormatter.format(time)}
+        {formatTime(time)}
       </div>
       <div
         className={css`
@@ -226,16 +234,6 @@ function CalendarHeader({index, calendar}) {
   );
 }
 
-const dayOfWeekFormatter = new Intl.DateTimeFormat(undefined, {
-  weekday: 'long',
-  timeZone: Temporal.now.timeZone(),
-});
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-  month: 'numeric',
-  day: 'numeric',
-  timeZone: Temporal.now.timeZone(),
-});
-
 function DatePicker({currentDateTime, setCurrentDateTime}) {
   const isSmall = window.matchMedia(SMALL_SCREEN).matches;
 
@@ -278,9 +276,9 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
           text-align: center;
           width: 100px;
         `}>
-        {dayOfWeekFormatter.format(currentDateTime)}
+        {currentDateTime.toLocaleString({weekday: 'long'})}
         {!isSmall && <br />}
-        {dateFormatter.format(currentDateTime)}
+        {currentDateTime.toLocaleString({month: 'numeric', day: 'numeric'})}
       </div>
       <button
         className={buttonStyle}
@@ -294,9 +292,8 @@ function DatePicker({currentDateTime, setCurrentDateTime}) {
 }
 
 function CurrentTimeIndicator({currentDateTime}) {
-  const time = currentDateTime.toTime();
-  const isBeforeStart = Temporal.Time.compare(time, START_TIME) < 0;
-  const isAfterEnd = Temporal.Time.compare(time, END_TIME) > 0;
+  const isBeforeStart = currentDateTime < START_TIME;
+  const isAfterEnd = currentDateTime > END_TIME;
 
   if (isBeforeStart || isAfterEnd) {
     return (
@@ -322,7 +319,7 @@ function CurrentTimeIndicator({currentDateTime}) {
           bottom: isAfterEnd ? 12 : null,
           top: isBeforeStart ? 64 : null,
         }}>
-        {timeFormatter.format(currentDateTime)}
+        {formatTime(currentDateTime)}
       </div>
     );
   }
@@ -362,7 +359,7 @@ function CurrentTimeIndicator({currentDateTime}) {
             width: auto;
           }
         `}>
-        {timeFormatter.format(currentDateTime)}
+        {formatTime(currentDateTime)}
       </div>
     </div>
   );
@@ -424,7 +421,7 @@ function FullscreenButton() {
 
 function toGridRow(time, round = Math.floor) {
   return (
-    round(time.difference(START_TIME, {largestUnit: 'minutes'}).minutes / 5) +
+    round(time.diff(START_TIME, 'minutes').minutes / 5) +
     1 +
     // Add an extra for the header
     1
