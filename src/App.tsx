@@ -7,6 +7,7 @@ import {
   FaCompress as CompressIcon,
   FaExpand as ExpandIcon,
 } from 'react-icons/fa';
+import {Textfit} from 'react-textfit';
 import createSilentAudio from './createSilentAudio';
 import {CALENDAR_DATA} from './data/CalendarData';
 
@@ -196,24 +197,23 @@ function CalendarEventEntry({
   calendar: Calendar;
   calendarIndex: number;
 }) {
+  const isSmall = window.matchMedia(SMALL_SCREEN).matches;
+  const fontSize = isSmall ? 16 : 44;
   const background = event.color || calendar.color || 'rgb(63, 81, 181)';
   const gridRowStart = toGridRow(event.start);
   const gridRowEnd = toGridRow(event.end);
   return (
-    <div
+    <Textfit
       className={css`
         border-radius: 4px;
         color: white;
-        font-size: ${gridRowEnd - gridRowStart > 3 ? 44 : 24}px;
+        font-size: ${fontSize}px;
         line-height: 100%;
         margin-bottom: 2px;
         margin-left: 8px;
         padding: 4px;
-
-        @media ${SMALL_SCREEN} {
-          font-size: 16px;
-        }
       `}
+      max={fontSize}
       onClick={() => {
         if ('speechSynthesis' in window) {
           const msg = new SpeechSynthesisUtterance();
@@ -230,7 +230,7 @@ function CalendarEventEntry({
         opacity: event.opacity,
       }}>
       {event.title}
-    </div>
+    </Textfit>
   );
 }
 
@@ -308,10 +308,10 @@ function DatePicker({
       <div
         className={css`
           text-align: center;
-          width: 100px;
+          white-space: nowrap;
         `}>
         {currentDateTime.toLocaleString({weekday: 'long'})}
-        {!isSmall && <br />}
+        {isSmall ? ' ' : <br />}
         {currentDateTime.toLocaleString({month: 'numeric', day: 'numeric'})}
       </div>
       <button
@@ -331,7 +331,7 @@ function CurrentTimeIndicator({currentDateTime}: {currentDateTime: DateTime}) {
 
   if (isBeforeStart || isAfterEnd) {
     return (
-      <div
+      <Textfit
         className={css`
           background: red;
           border-radius: 4px;
@@ -349,12 +349,13 @@ function CurrentTimeIndicator({currentDateTime}: {currentDateTime: DateTime}) {
             width: auto;
           }
         `}
+        mode="single"
         style={{
           bottom: isAfterEnd ? 12 : undefined,
           top: isBeforeStart ? 64 : undefined,
         }}>
         {formatTime(currentDateTime)}
-      </div>
+      </Textfit>
     );
   }
 
@@ -403,6 +404,7 @@ function CurrentTimeIndicator({currentDateTime}: {currentDateTime: DateTime}) {
 const audioSrc = createSilentAudio(10);
 
 function FullscreenButton() {
+  const isSmall = window.matchMedia(SMALL_SCREEN).matches;
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -423,7 +425,7 @@ function FullscreenButton() {
       <div
         className={css`
           cursor: pointer;
-          font-size: 32px;
+          font-size: ${isSmall ? 20 : 32}px;
           padding: 12px;
           position: fixed;
           right: 0;
