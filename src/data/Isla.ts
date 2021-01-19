@@ -5,8 +5,8 @@ export default {
     // Monday
     [
       {title: 'Welcome / SEL', start: '08:30'},
-      {title: 'Writing', start: '09:00'},
-      {title: 'Math', start: '09:45'},
+      {title: 'Math', start: '09:00'},
+      {title: 'Writing', start: '09:45'},
       {title: 'Break', start: '10:30'},
       {title: 'PE - Live', start: '11:00'},
       {title: 'Reading', start: '11:30'},
@@ -18,15 +18,14 @@ export default {
     // Tuesday
     [
       {title: 'Welcome / SEL', start: '08:30'},
-      {title: 'Writing', start: '09:00'},
-      {title: 'Math', start: '09:45'},
+      {title: 'Math', start: '09:00'},
+      {title: 'Writing', start: '09:45'},
       {title: 'Break', start: '10:30'},
       {title: 'PE - Seesaw', start: '11:00'},
       {title: 'Reading', start: '11:30'},
       {title: 'Lunch', start: '12:00'},
       {title: 'Social Studies', start: '12:45', end: '13:15'},
-      {title: 'Small Group - Sockeye', start: '13:20', end: '13:40'},
-      {title: 'Independent Work', start: '13:40', end: '13:55'},
+      {title: 'Independent Work', start: '13:15', end: '13:55'},
       {title: 'Art / Music', start: '13:55', end: '14:25'},
     ],
     // Wednesday
@@ -34,10 +33,10 @@ export default {
       {title: 'Welcome / SEL', start: '08:30'},
       {title: 'Writing', start: '09:00'},
       {title: 'Reading', start: '09:30'},
-      {title: 'Independent Work / Small Groups', start: '10:00'},
+      {title: 'Independent Work', start: '10:00'},
       {title: 'Break', start: '10:30'},
       {title: 'PE - Seesaw', start: '11:00'},
-      {title: 'Social Studies', start: '11:30'},
+      {title: 'Tinker Time', start: '11:30'},
       {title: 'Lunch', start: '12:00', end: '12:45'},
       {title: 'Class Connections / Community Meeting', start: '12:45'},
       {title: 'Independent Work', start: '13:15', end: '13:55'},
@@ -45,8 +44,8 @@ export default {
     // Thursday
     [
       {title: 'Welcome / SEL', start: '08:30'},
-      {title: 'Writing', start: '09:00'},
-      {title: 'Math', start: '09:45'},
+      {title: 'Math', start: '09:00'},
+      {title: 'Writing', start: '09:45'},
       {title: 'Break', start: '10:30'},
       {title: 'PE - Seesaw', start: '11:00'},
       {title: 'Reading', start: '11:30'},
@@ -57,8 +56,8 @@ export default {
     // Friday
     [
       {title: 'Welcome / SEL', start: '08:30'},
-      {title: 'Writing', start: '09:00'},
-      {title: 'Math', start: '09:45'},
+      {title: 'Math', start: '09:00'},
+      {title: 'Writing', start: '09:45'},
       {title: 'Break', start: '10:30'},
       {title: 'PE - Seesaw', start: '11:00'},
       {title: 'Reading', start: '11:30'},
