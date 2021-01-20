@@ -31,8 +31,8 @@ export default {
     // Wednesday
     [
       {title: 'Welcome / SEL', start: '08:30'},
-      {title: 'Writing', start: '09:00'},
-      {title: 'Reading', start: '09:30'},
+      {title: 'Math', start: '09:00', end: '09:40'},
+      {title: 'Writing', start: '09:45'},
       {title: 'Independent Work', start: '10:00'},
       {title: 'Break', start: '10:30'},
       {title: 'PE - Seesaw', start: '11:00'},
