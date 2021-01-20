@@ -37,7 +37,11 @@ export default {
       {title: 'PE - Seesaw', start: '11:00'},
       {title: 'Tinker Time', start: '11:30'},
       {title: 'Lunch', start: '12:00', end: '12:45'},
-      {title: 'Class Connections / Community Meeting', start: '12:45'},
+      {
+        title: 'Class Connections / Community Meeting',
+        start: '12:45',
+        end: '13:15',
+      },
     ],
     // Thursday
     [
