@@ -31,14 +31,13 @@ export default {
     // Wednesday
     [
       {title: 'Welcome / SEL', start: '08:30'},
-      {title: 'Math', start: '09:00', end: '09:40'},
-      {title: 'Writing', start: '09:45'},
+      {title: 'Small groups (reading and writing)', start: '09:00'},
+      {title: 'Small group conferences', start: '09:45'},
       {title: 'Break', start: '10:30'},
-      {title: 'PE - Seesaw', start: '11:00'},
-      {title: 'Tinker Time', start: '11:30'},
+      {title: 'Small groups', start: '11:30'},
       {title: 'Lunch', start: '12:00', end: '12:45'},
       {
-        title: 'Class Connections / Community Meeting',
+        title: 'Community Meeting / Independent Work',
         start: '12:45',
         end: '13:15',
       },
