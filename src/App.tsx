@@ -326,6 +326,11 @@ function DatePicker({
 }
 
 function CurrentTimeIndicator({currentDateTime}: {currentDateTime: DateTime}) {
+  let now = DateTime.local();
+  if (!currentDateTime.hasSame(now, 'day')) {
+    return null;
+  }
+
   const isBeforeStart = currentDateTime < START_TIME;
   const isAfterEnd = currentDateTime > END_TIME;
 
