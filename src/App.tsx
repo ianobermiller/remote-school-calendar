@@ -83,10 +83,13 @@ function formatTime(dateTime: DateTime): string {
 
 function App() {
   const [currentDateTime, setCurrentDateTime] = useState(DateTime.local());
+  const [overrideDateTime, setOverrideDateTime] = useState<DateTime | null>(
+    null,
+  );
   useEffect(() => {
     const id = setInterval(() => {
       setCurrentDateTime(DateTime.local());
-    }, 1000 * 10);
+    }, 1000);
     return () => clearInterval(id);
   }, []);
 
@@ -96,6 +99,8 @@ function App() {
     rows.push(current);
     current = current.plus(LABEL_STEP);
   }
+
+  const dateTime = overrideDateTime ?? currentDateTime;
 
   return (
     <div
@@ -128,9 +133,7 @@ function App() {
       ))}
 
       {CALENDARS.map((cal, calIndex) =>
-        (
-          cal.eventsByDay[currentDateTime.weekday - 1] ?? []
-        ).map((ev, evIndex) => (
+        (cal.eventsByDay[dateTime.weekday - 1] ?? []).map((ev, evIndex) => (
           <CalendarEventEntry
             calendar={cal}
             calendarIndex={calIndex}
@@ -142,10 +145,11 @@ function App() {
 
       <DatePicker
         currentDateTime={currentDateTime}
-        setCurrentDateTime={setCurrentDateTime}
+        overrideDateTime={overrideDateTime}
+        setOverrideDateTime={setOverrideDateTime}
       />
 
-      <CurrentTimeIndicator currentDateTime={currentDateTime} />
+      <CurrentTimeIndicator currentDateTime={dateTime} />
 
       <FullscreenButton />
     </div>
@@ -264,14 +268,16 @@ function CalendarHeader({
 
 function DatePicker({
   currentDateTime,
-  setCurrentDateTime,
+  overrideDateTime,
+  setOverrideDateTime,
 }: {
   currentDateTime: DateTime;
-  setCurrentDateTime: Dispatch<SetStateAction<DateTime>>;
+  overrideDateTime: DateTime | null;
+  setOverrideDateTime: Dispatch<SetStateAction<DateTime | null>>;
 }) {
   const isSmall = window.matchMedia(SMALL_SCREEN).matches;
 
-  const buttonStyle = css`
+  const arrowButtonStyle = css`
     border: none;
     background: none;
     color: inherit;
@@ -281,6 +287,8 @@ function DatePicker({
     padding: 4px;
   `;
 
+  const dateTime = overrideDateTime ?? currentDateTime;
+
   return (
     <div
       className={css`
@@ -288,20 +296,23 @@ function DatePicker({
         color: #666;
         display: flex;
         font-size: 20px;
-        position: fixed;
+        justify-content: space-between;
         left: 8px;
+        position: fixed;
         top: 8px;
+        width: 200px;
 
         @media ${SMALL_SCREEN} {
           left: 50%;
           top: 0;
           transform: translateX(-50%);
+          width: 240px;
         }
       `}>
       <button
-        className={buttonStyle}
+        className={arrowButtonStyle}
         onClick={() => {
-          setCurrentDateTime(d => d.minus({days: 1}));
+          setOverrideDateTime(dateTime.minus({days: 1}));
         }}>
         <LeftIcon />
       </button>
@@ -310,14 +321,31 @@ function DatePicker({
           text-align: center;
           white-space: nowrap;
         `}>
-        {currentDateTime.toLocaleString({weekday: 'long'})}
+        {dateTime.toLocaleString({weekday: 'long'})}
         {isSmall ? ' ' : <br />}
-        {currentDateTime.toLocaleString({month: 'numeric', day: 'numeric'})}
+        {dateTime.toLocaleString({month: 'numeric', day: 'numeric'})}
+        {overrideDateTime ? (
+          <>
+            <br />
+            <button
+              className={css`
+                background: white;
+                border: solid 1px #666;
+                border-radius: 4px;
+                padding: 4px 8px;
+              `}
+              onClick={() => {
+                setOverrideDateTime(null);
+              }}>
+              Reset
+            </button>
+          </>
+        ) : null}
       </div>
       <button
-        className={buttonStyle}
+        className={arrowButtonStyle}
         onClick={() => {
-          setCurrentDateTime(d => d.plus({days: 1}));
+          setOverrideDateTime(dateTime.plus({days: 1}));
         }}>
         <RightIcon />
       </button>
