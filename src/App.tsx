@@ -26,16 +26,19 @@ interface Calendar {
 }
 
 const TIME_ZONE = 'America/Los_Angeles';
-const START_TIME = DateTime.fromObject({
-  hour: 8,
-  minute: 30,
-  zone: TIME_ZONE,
-});
-const END_TIME = DateTime.fromObject({
-  hour: 14,
-  minute: 30,
-  zone: TIME_ZONE,
-});
+// Use functions for start and end so they always represent the current day
+const getStartTime = () =>
+  DateTime.fromObject({
+    hour: 8,
+    minute: 30,
+    zone: TIME_ZONE,
+  });
+const getEndTime = () =>
+  DateTime.fromObject({
+    hour: 14,
+    minute: 30,
+    zone: TIME_ZONE,
+  });
 const LABEL_STEP = Duration.fromObject({minutes: 30});
 
 const SMALL_SCREEN = '(max-width: 400px)';
@@ -94,8 +97,9 @@ function App() {
   }, []);
 
   const rows = [];
-  let current = START_TIME;
-  while (current < END_TIME) {
+  let current = getStartTime();
+  const end = getEndTime();
+  while (current < end) {
     rows.push(current);
     current = current.plus(LABEL_STEP);
   }
@@ -359,8 +363,8 @@ function CurrentTimeIndicator({currentDateTime}: {currentDateTime: DateTime}) {
     return null;
   }
 
-  const isBeforeStart = currentDateTime < START_TIME;
-  const isAfterEnd = currentDateTime > END_TIME;
+  const isBeforeStart = currentDateTime < getStartTime();
+  const isAfterEnd = currentDateTime > getEndTime();
 
   if (isBeforeStart || isAfterEnd) {
     return (
@@ -490,7 +494,7 @@ function FullscreenButton() {
 
 function toGridRow(time: DateTime, round = Math.floor): number {
   return (
-    round(time.diff(START_TIME, 'minutes').minutes / 5) +
+    round(time.diff(getStartTime(), 'minutes').minutes / 5) +
     1 +
     // Add an extra for the header
     1
