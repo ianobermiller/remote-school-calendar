@@ -13,8 +13,8 @@ import {CALENDAR_DATA} from './data/CalendarData';
 
 interface CalendarEvent {
   title: string;
-  start: DateTime;
-  end: DateTime;
+  start: Duration;
+  end: Duration;
   color: string | undefined;
   opacity: number;
 }
@@ -70,8 +70,8 @@ const CALENDARS: Array<Calendar> = CALENDAR_DATA.map(cal => ({
         ...ev,
         color,
         opacity,
-        start: DateTime.fromISO(ev.start, {zone: TIME_ZONE}),
-        end: DateTime.fromISO(end, {zone: TIME_ZONE}),
+        start: Duration.fromISOTime(ev.start),
+        end: Duration.fromISOTime(end),
       };
     }),
   ),
@@ -208,8 +208,9 @@ function CalendarEventEntry({
   const isSmall = window.matchMedia(SMALL_SCREEN).matches;
   const fontSize = isSmall ? 16 : 44;
   const background = event.color || calendar.color || 'rgb(63, 81, 181)';
-  const gridRowStart = toGridRow(event.start);
-  const gridRowEnd = toGridRow(event.end);
+  const dayStart = getStartTime().startOf('day');
+  const gridRowStart = toGridRow(dayStart.plus(event.start));
+  const gridRowEnd = toGridRow(dayStart.plus(event.end));
   return (
     <Textfit
       className={css`
