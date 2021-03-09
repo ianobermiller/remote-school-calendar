@@ -294,6 +294,15 @@ function DatePicker({
 
   const dateTime = overrideDateTime ?? currentDateTime;
 
+  function moveOverrideDay(days: number) {
+    const newOverride = dateTime.plus({days});
+    if (newOverride.hasSame(currentDateTime, 'day')) {
+      setOverrideDateTime(null);
+    } else {
+      setOverrideDateTime(newOverride);
+    }
+  }
+
   return (
     <div
       className={css`
@@ -314,11 +323,7 @@ function DatePicker({
           width: 240px;
         }
       `}>
-      <button
-        className={arrowButtonStyle}
-        onClick={() => {
-          setOverrideDateTime(dateTime.minus({days: 1}));
-        }}>
+      <button className={arrowButtonStyle} onClick={() => moveOverrideDay(-1)}>
         <LeftIcon />
       </button>
       <div
@@ -347,11 +352,7 @@ function DatePicker({
           </>
         ) : null}
       </div>
-      <button
-        className={arrowButtonStyle}
-        onClick={() => {
-          setOverrideDateTime(dateTime.plus({days: 1}));
-        }}>
+      <button className={arrowButtonStyle} onClick={() => moveOverrideDay(1)}>
         <RightIcon />
       </button>
     </div>
