@@ -30,7 +30,7 @@ const TIME_ZONE = 'America/Los_Angeles';
 const getStartTime = () =>
   DateTime.fromObject({
     hour: 8,
-    minute: 30,
+    minute: 0,
     zone: TIME_ZONE,
   });
 const getEndTime = () =>
@@ -62,16 +62,30 @@ const CALENDARS: Array<Calendar> = CALENDAR_DATA.map(cal => ({
         opacity = 0.6;
       }
       if (
-        ['independent', 'seesaw', 'office'].some(term => lower.includes(term))
+        [
+          'independent',
+          'seesaw',
+          'office',
+          'in-person school',
+          'async',
+        ].some(term => lower.includes(term))
       ) {
         opacity = 0.6;
       }
+
+      const endDuration = Duration.fromISOTime(end);
+      if (!endDuration.isValid) {
+        throw new Error(
+          endDuration.invalidReason + '\n' + endDuration.invalidExplanation,
+        );
+      }
+
       return {
         ...ev,
         color,
         opacity,
         start: Duration.fromISOTime(ev.start),
-        end: Duration.fromISOTime(end),
+        end: endDuration,
       };
     }),
   ),
